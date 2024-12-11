@@ -9,12 +9,11 @@ Dalam ethical hacking, ethical hacker menggunakan metode yang sama dengan hacker
 Ethical hacker wajib mengikuti aturan tertentu, termasuk menjaga kerahasiaan informasi yang ditemukan selama proses hacking. 
 
 Tahapan ethical hacking secara umum adalah:
-1.  __Reconnaissance (_Information Gathering_)__: Mengumpulkan informasi tentang target.
-2.  __Scanning__: Menemukan kelemahan keamanan dalam sistem target. Scanning sebenarnya masih termasuk ke dalam _information gathering_, akan tetapi informasi yang dikumpulkan lebih bersifat private (scanning hanya boleh dilakukan bila sudah mendapat ijin dari pemilik sistem).
-3.  __Vulnerability Analysis__: Melakukan proses untuk mengidentifikasi, menganalisis, dan mengelompokkan tingkat risiko kerentanan/kelemahan pada sistem target.
-4. __Exploitation__: Mengeksploitasi kelemahan keamanan untuk mendapatkan akses ke sistem target.
-5. __Maintaining Access__: Mempertahankan akses ke sistem target.
-6. __Covering Tracks__: Menghapus jejak aktivitas ethical hacker.
+1.  __Reconnaissance / Information Gathering__: Mengumpulkan informasi tentang target.
+2.  __Scanning__: Menemukan kelemahan keamanan dalam sistem target. Scanning sebenarnya masih termasuk ke dalam _information gathering_, akan tetapi informasi yang dikumpulkan lebih bersifat private (scanning hanya boleh dilakukan bila sudah mendapat ijin dari pemilik sistem). Hasil dari scanning kita bisa melakukan __Vulnerability Analysis__ yaitu  proses untuk mengidentifikasi, menganalisis, dan mengelompokkan tingkat risiko kerentanan/kelemahan pada sistem target.
+3. __Exploitation__: Mengeksploitasi kelemahan keamanan untuk mendapatkan akses ke sistem target.
+4. __Maintaining Access__: Mempertahankan akses ke sistem target.
+5. __Covering Tracks__: Menghapus jejak aktivitas ethical hacker.
 
 ### Peran Ethical Hacking untuk Perusahaan/Instansi
 
@@ -117,7 +116,7 @@ Sebelum memulai course ini beberapa kebutuhan yang wajib sudah dipahami:
 
 ## 2. Reconnaissance
 
-Reconnaissance / Information Gathering adalah kegiatan mengumpulkan informasi tentang target. Informasi yang dikumpulkan bisa berupa ip address, username, email, teknologi, OS, informasi suatu website dll.
+Reconnaissance / Information Gathering adalah kegiatan mengumpulkan informasi tentang target. Informasi yang dikumpulkan bisa berupa ip address, username, email, teknologi, OS, informasi suatu website dll. Information Gathering pada umumnya bersifat legal karena informasi yang dibutuhkan masih bersifat public.
 
 Information Gathering terbagi 2:
 
@@ -243,3 +242,235 @@ menyimpan output result ke dalam file
 ```bash
 sherlock username --timeout 5 --print-all --output output.txt
 ```
+
+## 3. Scanning
+
+Scaning merupakan proses mengumpulkan informasi yang bersifat private, yang seharusnya dilakukan atas ijin pemilik sistem.
+
+### Tools
+
+Kita membutuhkan vulnerability manchine untuk latihan sebagai target serangan, berikut manchine tool yang digunakan:
+
+* Metasploitable (ip target 192.168.1.32)
+
+### netdiscover
+
+Netdiscover merupakan tool untuk melakukan scan ipaddress dalam suatu network
+
+```bash
+sudo netdiscover -r 192.168.1.0/24
+```
+
+output
+
+```bash
+Currently scanning: Finished!   |   Screen View: Unique Hosts                                                                                                                                                                             
+                                                                                                                                                                                                                                           
+ 6 Captured ARP Req/Rep packets, from 5 hosts.   Total size: 540                                                                                                                                                                           
+ _____________________________________________________________________________
+   IP            At MAC Address     Count     Len  MAC Vendor / Hostname      
+ -----------------------------------------------------------------------------
+                                                                            
+ 192.168.1.32    08:00:27:27:b4:9c      1      60  PCS Systemtechnik GmbH                                                                                                                                                                    
+ 192.168.1.6     7e:5d:29:8a:cc:e8      1      60  Unknown vendor                                                                                                                                                                          
+ 192.168.1.2     04:d6:aa:00:df:ea      1      60  SAMSUNG ELECTRO-MECHANICS(THAILAND)                                                                                                                                                     
+ 192.168.1.3     4c:60:ba:1e:b9:d4      1      60  Unknown vendor                                                                                                                                                                          
+ 192.168.1.29    b4:a5:ac:c5:9a:29      1      60  GUANGDONG OPPO MOBILE TELECOMMUNICATIONS CORP.,LTD                                                                                                                                      
+ 192.168.1.36    b6:96:3e:75:20:5a      1      60  Unknown vendor   
+```
+
+### Nmap
+
+Nmap, atau Network Mapper, adalah alat pemindaian jaringan open source yang digunakan untuk mengeksplorasi dan mengaudit keamanan jaringan:
+* Menemukan perangkat yang terhubung ke jaringan
+* Menemukan port yang terbuka di perangkat tersebut
+* Mengidentifikasi informasi lebih lengkap dari perangkat dan jaringan yang dipindai
+* Mendeteksi dan memperbaiki kerentanan sejak dini
+* Memantau aktivitas jaringan secara real-time 
+
+Nmap memiliki berbagai fitur, di antaranya: 
+
+* Pemindaian IP raw untuk mendapatkan informasi yang lebih detail tentang port dan layanan yang aktif 
+* Pemindaian port untuk menentukan status port-port tersebut 
+* Deteksi sistem operasi dengan menganalisis respons dari target 
+* Nmap Scripting Engine (NSE) untuk menjalankan skrip khusus selama pemindaian 
+* Host discovery untuk memeriksa dan mendeteksi keberadaan host di sebuah jaringan 
+
+__Scanning ip__
+
+```bash
+$ nmap -sn 192.168.1.0/24
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-10 20:45 +08
+Nmap scan report for 192.168.1.2 (192.168.1.2)
+Host is up (0.049s latency).
+MAC Address: 04:D6:AA:00:DF:EA (Samsung Electro-mechanics(Thailand))
+Nmap scan report for 192.168.1.3 (192.168.1.3)
+Host is up (0.097s latency).
+MAC Address: 4C:60:BA:1E:B9:D4 (Unknown)
+Nmap scan report for 192.168.1.4 (192.168.1.4)
+Host is up (0.14s latency).
+MAC Address: EE:B8:E5:79:42:04 (Unknown)
+Nmap scan report for 192.168.1.6 (192.168.1.6)
+Host is up (0.064s latency).
+MAC Address: 7E:5D:29:8A:CC:E8 (Unknown)
+Nmap scan report for 192.168.1.11 (192.168.1.11)
+Host is up (0.12s latency).
+MAC Address: D6:9B:B0:C2:FB:9C (Unknown)
+Nmap scan report for 192.168.1.15 (192.168.1.15)
+Host is up (1.7s latency).
+MAC Address: 56:26:56:08:45:85 (Unknown)
+Nmap scan report for 192.168.1.21 (192.168.1.21)
+Host is up (0.22s latency).
+MAC Address: 8E:91:48:50:92:52 (Unknown)
+Nmap scan report for 192.168.1.23 (192.168.1.23)
+Host is up (0.072s latency).
+MAC Address: B4:A5:AC:C1:6A:7B (Guangdong Oppo Mobile Telecommunications)
+Nmap scan report for 192.168.1.27 (192.168.1.27)
+Host is up (0.19s latency).
+MAC Address: 72:27:0F:4E:CB:18 (Unknown)
+Nmap scan report for 192.168.1.32 (192.168.1.32)
+Host is up (0.00023s latency).
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+Nmap scan report for 192.168.1.34 (192.168.1.34)
+Host is up (0.00025s latency).
+MAC Address: 9C:6B:00:56:78:0F (Unknown)
+Nmap scan report for 192.168.1.18 (192.168.1.18)
+Host is up.
+Nmap done: 256 IP addresses (14 hosts up) scanned in 19.92 seconds
+```
+
+Disini kita menemukan terget dengan ip 192.168.1.32
+
+__Scanning port target__
+
+Melakukan port scanning target Metasploitable
+
+```bash
+$ nmap 192.168.1.32
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-10 20:38 +08
+Nmap scan report for 192.168.1.32 (192.168.1.32)
+Host is up (0.0085s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE
+21/tcp   open  ftp
+22/tcp   open  ssh
+23/tcp   open  telnet
+25/tcp   open  smtp
+53/tcp   open  domain
+80/tcp   open  http
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+512/tcp  open  exec
+513/tcp  open  login
+514/tcp  open  shell
+1099/tcp open  rmiregistry
+1524/tcp open  ingreslock
+2049/tcp open  nfs
+2121/tcp open  ccproxy-ftp
+3306/tcp open  mysql
+5432/tcp open  postgresql
+5900/tcp open  vnc
+6000/tcp open  X11
+6667/tcp open  irc
+8009/tcp open  ajp13
+8180/tcp open  unknown
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.63 seconds
+```
+
+__Melakukan port scanning semua perangkat dalam LAN (ex. 192.168.1.0/24).__
+
+```bash
+nmap 192.168.1.0/24
+```
+
+__Scanning perangkat yang sedang aktif__
+
+```bash
+map -sn 192.168.1.0/24
+
+tarting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-11 15:56 +08
+Nmap scan report for gpon.net (192.168.1.1)
+Host is up (0.0028s latency).
+MAC Address: EC:F0:FE:8A:AB:0E (zte)
+Nmap scan report for 192.168.1.2 (192.168.1.2)
+Host is up (0.075s latency).
+MAC Address: 04:D6:AA:00:DF:EA (Samsung Electro-mechanics(Thailand))
+Nmap scan report for 192.168.1.3 (192.168.1.3)
+Host is up (0.091s latency).
+MAC Address: 4C:60:BA:1E:B9:D4 (Unknown)
+Nmap scan report for 192.168.1.6 (192.168.1.6)
+Host is up (1.6s latency).
+MAC Address: 7E:5D:29:8A:CC:E8 (Unknown)
+Nmap scan report for 192.168.1.8 (192.168.1.8)
+Host is up (0.20s latency).
+MAC Address: EE:67:13:C8:D6:66 (Unknown)
+Nmap scan report for 192.168.1.14 (192.168.1.14)
+Host is up (0.88s latency).
+MAC Address: FC:A5:D0:98:FA:41 (Guangdong Oppo Mobile Telecommunications)
+Nmap scan report for 192.168.1.19 (192.168.1.19)
+Host is up (0.19s latency).
+MAC Address: FA:6E:18:94:DA:59 (Unknown)
+Nmap scan report for 192.168.1.25 (192.168.1.25)
+Host is up (0.097s latency).
+MAC Address: 1A:F4:EE:B9:BF:D2 (Unknown)
+Nmap scan report for 192.168.1.32 (192.168.1.32)
+Host is up (0.011s latency).
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+Nmap scan report for 192.168.1.35 (192.168.1.35)
+Host is up (0.00039s latency).
+MAC Address: 9C:6B:00:56:78:0F (Unknown)
+Nmap scan report for 192.168.1.18 (192.168.1.18)
+Host is up.
+Nmap done: 256 IP addresses (11 hosts up) scanned in 46.26 seconds
+```
+
+__Scan terhadap Microsoft Windows yang memblokir nmap__
+
+```bash
+nmap -Pn 192.169.1.10
+```
+
+__Scan berdasarkan ip range__
+
+```bash
+nmap 192.168.1.0-255
+```
+
+atau
+
+```bash
+nmap 192.168.1.*
+```
+
+__Scan dari list ip yang berada dalam file__
+
+```bash
+$ cat list-ip.txt 
+192.168.1.22
+192.168.1.23
+
+
+$ nmap -iL list-ip.txt
+```
+
+#### TCP vs UDP
+
+![TCP vs UDP](img/tcpvsudp.png "TCP vs UDP")
+
+__Sync Scan__
+
+```bash
+sudo nmap -sS 192.168.1.22
+```
+
+__TCP Scan__
+
+```bash
+nmap -sT 192.168.1.22
+```
+
