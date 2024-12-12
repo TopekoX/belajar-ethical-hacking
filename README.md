@@ -340,8 +340,6 @@ Host is up.
 Nmap done: 256 IP addresses (14 hosts up) scanned in 19.92 seconds
 ```
 
-Disini kita menemukan terget dengan ip 192.168.1.32
-
 __Scanning port target__
 
 Melakukan port scanning target Metasploitable
@@ -391,7 +389,7 @@ nmap 192.168.1.0/24
 __Scanning perangkat yang sedang aktif__
 
 ```bash
-map -sn 192.168.1.0/24
+nmap -sn 192.168.1.0/24
 
 tarting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-11 15:56 +08
 Nmap scan report for gpon.net (192.168.1.1)
@@ -474,3 +472,312 @@ __TCP Scan__
 nmap -sT 192.168.1.22
 ```
 
+__UDP Scan__
+
+```bash
+nmap -sU 192.168.1.22
+```
+
+#### Scanning Sistem Operasi
+
+```bash
+$ nmap -O 192.168.1.10
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-11 23:01 +08
+Nmap scan report for 192.168.1.10
+Host is up (0.041s latency).
+Not shown: 994 filtered tcp ports (no-response)
+PORT     STATE  SERVICE
+53/tcp   open   domain
+80/tcp   open   http
+113/tcp  closed ident
+443/tcp  open   https
+3306/tcp open   mysql
+8008/tcp open   http
+Device type: general purpose
+Running (JUST GUESSING): OpenBSD 4.X (87%)
+OS CPE: cpe:/o:openbsd:openbsd:4.0
+Aggressive OS guesses: OpenBSD 4.0 (87%), OpenBSD 4.3 (86%)
+No exact OS matches for host (test conditions non-ideal).
+```
+
+#### Scanning Service Version
+
+```bash
+$ nmap -sV 192.168.1.22
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-11 22:58 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.00090s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+53/tcp   open  domain      ISC BIND 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open  rpcbind     2 (RPC #100000)
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+512/tcp  open  exec        netkit-rsh rexecd
+513/tcp  open  login
+514/tcp  open  tcpwrapped
+1099/tcp open  java-rmi    GNU Classpath grmiregistry
+1524/tcp open  bindshell   Metasploitable root shell
+2049/tcp open  nfs         2-4 (RPC #100003)
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open  vnc         VNC (protocol 3.3)
+6000/tcp open  X11         (access denied)
+6667/tcp open  irc         UnrealIRCd
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+8180/tcp open  http        Apache Tomcat/Coyote JSP engine 1.1
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+Service Info: Hosts:  metasploitable.localdomain, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 12.30 seconds
+```
+
+Kita juga dapat mengatur intensitas dalam scanning service di nmap, adapun skala intensitasnya dari 1 - 9. Secara default intensitas yang di scan berada dalam skala 7, makin kecil scalanya makin cepat proses scannya. Berikut contoh menggunakan intersitas secara custom:
+
+```bash
+nmap -sV --version-intensity 2 192.168.1.22
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-12 20:57 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.0016s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+53/tcp   open  domain      ISC BIND 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+512/tcp  open  exec        netkit-rsh rexecd
+513/tcp  open  login       OpenBSD or Solaris rlogind
+514/tcp  open  tcpwrapped
+1099/tcp open  java-rmi    GNU Classpath grmiregistry
+1524/tcp open  bindshell   Metasploitable root shell
+2049/tcp open  rpcbind
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open  vnc         VNC (protocol 3.3)
+6000/tcp open  X11         (access denied)
+6667/tcp open  irc         UnrealIRCd
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+8180/tcp open  http        Apache Tomcat/Coyote JSP engine 1.1
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+Service Info: Hosts:  metasploitable.localdomain, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.75 seconds
+```
+
+Selain memberi angka kita juga bisa menggunakan perintah secara langsung, gunakan perintah berikut untuk intensitas rendah
+
+```bash
+nmap -sV --version-light 192.168.1.22
+```
+
+perintah berikut untuk intensitas tinggi
+
+```bash
+nmap -sV --version-all 192.168.1.22
+```
+
+#### Agresive Scan
+
+Kita dapat melakukan agresive scan dengan catatan scan akan lebih lama dan beresiko terdeksi jika mesin target terdapat detektor.
+
+```bash
+$ nmap -A 192.168.1.22
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-12 21:45 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.0089s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to 192.168.1.21
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      vsFTPd 2.3.4 - secure, fast, stable
+|_End of status
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 60:0f:cf:e1:c0:5f:6a:74:d6:90:24:fa:c4:d5:6c:cd (DSA)
+|_  2048 56:56:24:0f:21:1d:de:a7:2b:ae:61:b1:24:3d:e8:f3 (RSA)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_RC4_128_EXPORT40_WITH_MD5
+|     SSL2_RC2_128_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_DES_64_CBC_WITH_MD5
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|_    SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+| ssl-cert: Subject: commonName=ubuntu804-base.localdomain/organizationName=OCOSA/stateOrProvinceName=There is no such thing outside US/countryName=XX
+| Not valid before: 2010-03-17T14:07:45
+|_Not valid after:  2010-04-16T14:07:45
+|_ssl-date: 2024-12-12T12:57:03+00:00; -48m41s from scanner time.
+|_smtp-commands: metasploitable.localdomain, PIPELINING, SIZE 10240000, VRFY, ETRN, STARTTLS, ENHANCEDSTATUSCODES, 8BITMIME, DSN
+53/tcp   open  domain      ISC BIND 9.4.2
+| dns-nsid: 
+|_  bind.version: 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+|_http-server-header: Apache/2.2.8 (Ubuntu) DAV/2
+|_http-title: Metasploitable2 - Linux
+111/tcp  open  rpcbind     2 (RPC #100000)
+| rpcinfo: 
+|   program version    port/proto  service
+|   100000  2            111/tcp   rpcbind
+|   100000  2            111/udp   rpcbind
+|   100003  2,3,4       2049/tcp   nfs
+|   100003  2,3,4       2049/udp   nfs
+|   100005  1,2,3      41978/udp   mountd
+|   100005  1,2,3      58871/tcp   mountd
+|   100021  1,3,4      43098/udp   nlockmgr
+|   100021  1,3,4      49437/tcp   nlockmgr
+|   100024  1          39234/tcp   status
+|_  100024  1          42919/udp   status
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.0.20-Debian (workgroup: WORKGROUP)
+512/tcp  open  exec        netkit-rsh rexecd
+513/tcp  open  login       OpenBSD or Solaris rlogind
+514/tcp  open  tcpwrapped
+1099/tcp open  java-rmi    GNU Classpath grmiregistry
+1524/tcp open  bindshell   Metasploitable root shell
+2049/tcp open  nfs         2-4 (RPC #100003)
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+| mysql-info: 
+|   Protocol: 10
+|   Version: 5.0.51a-3ubuntu5
+|   Thread ID: 14
+|   Capabilities flags: 43564
+|   Some Capabilities: Support41Auth, SupportsTransactions, ConnectWithDatabase, SwitchToSSLAfterHandshake, Speaks41ProtocolNew, SupportsCompression, LongColumnFlag
+|   Status: Autocommit
+|_  Salt: 3OrqcxSvxvj2XE1axY46
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+| ssl-cert: Subject: commonName=ubuntu804-base.localdomain/organizationName=OCOSA/stateOrProvinceName=There is no such thing outside US/countryName=XX
+| Not valid before: 2010-03-17T14:07:45
+|_Not valid after:  2010-04-16T14:07:45
+|_ssl-date: 2024-12-12T12:57:03+00:00; -48m41s from scanner time.
+5900/tcp open  vnc         VNC (protocol 3.3)
+| vnc-info: 
+|   Protocol version: 3.3
+|   Security types: 
+|_    VNC Authentication (2)
+6000/tcp open  X11         (access denied)
+6667/tcp open  irc         UnrealIRCd
+| irc-info: 
+|   users: 1
+|   servers: 1
+|   lusers: 1
+|   lservers: 0
+|   server: irc.Metasploitable.LAN
+|   version: Unreal3.2.8.1. irc.Metasploitable.LAN 
+|   uptime: 0 days, 0:44:41
+|   source ident: nmap
+|   source host: 69A65CDA.78DED367.FFFA6D49.IP
+|_  error: Closing Link: oxrouucwv[192.168.1.21] (Quit: oxrouucwv)
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+|_ajp-methods: Failed to get a valid response for the OPTION request
+8180/tcp open  http        Apache Tomcat/Coyote JSP engine 1.1
+|_http-server-header: Apache-Coyote/1.1
+|_http-favicon: Apache Tomcat
+|_http-title: Apache Tomcat/5.5
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS: Linux
+
+Network Distance: 1 hop
+Service Info: Hosts:  metasploitable.localdomain, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Host script results:
+|_clock-skew: mean: 26m21s, deviation: 2h30m01s, median: -48m41s
+| smb-os-discovery: 
+|   OS: Unix (Samba 3.0.20-Debian)
+|   Computer name: metasploitable
+|   NetBIOS computer name: 
+|   Domain name: localdomain
+|   FQDN: metasploitable.localdomain
+|_  System time: 2024-12-12T07:56:59-05:00
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+|_nbstat: NetBIOS name: METASPLOITABLE, NetBIOS user: <unknown>, NetBIOS MAC: <unknown> (unknown)
+|_smb2-time: Protocol negotiation failed (SMB2)
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   8.88 ms 192.168.1.22 (192.168.1.22)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 33.09 seconds
+```
+
+#### Menentukan Port yang akan d scan
+
+Contoh scan port  21
+
+```bash
+ nmap -sS -p 21 192.168.1.22
+```
+
+Scan lebih dari satu port
+
+```bash
+nmap -sS -p 21,22,80,100 192.168.1.22
+```
+
+Scan port dengan rentang port tertentu
+
+```bash
+nmap -sS -p 20-200 192.168.1.22
+```
+
+Scan semua nomor port
+
+```bash
+nmap -sS -p- 192.168.1.22
+```
+
+Scan 100 port yang sering digunakan
+
+```bash
+nmap -sS -F 192.168.1.22
+```
+
+Simpan ke dalam file tanpa menampilkan output
+
+```bash
+nmap -sS -F 192.168.1.22 >> scan-port.txt
+```
+
+Simpan ke dalam file dengan menampilkan output
+
+```bash
+nmap -sS -F -oN output-port.txt 192.168.1.22
+```
