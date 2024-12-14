@@ -340,6 +340,8 @@ Host is up.
 Nmap done: 256 IP addresses (14 hosts up) scanned in 19.92 seconds
 ```
 
+Jika ingin melihat debug message tambahkan opsi `-d`.
+
 __Scanning port target__
 
 Melakukan port scanning target Metasploitable
@@ -781,3 +783,287 @@ Simpan ke dalam file dengan menampilkan output
 ```bash
 nmap -sS -F -oN output-port.txt 192.168.1.22
 ```
+
+## 4. Vulnerability Analysis
+
+Vulnerability Analysis adalah proses melakukan analisis kerentanan suatu sistem. Secara garis besar ada 2 Vulnerability Analysis:
+
+1. Known Vulnerability: Kerentanan yang sudah diketahui, dikenal, sudah didokumentasikan dan sudah memilikik identitas dan nama. Identitas dan nama ini dikenal dengan CVE (Common Vulnerabilities and Exposures) adalah sistem katalog celah kerentanan keamanan sistem informasi. Katalog CVE bisa dilihat di [https://cve.mitre.org/](https://cve.mitre.org/).
+2. Unknown Vulnerability: Kerentanan yang belum diketahui.
+
+### Vulnerability dengan Nmap
+
+Untuk melakukan vurnerability scan dengan nmap kita akan menggunakan nmap script script yang berada di `usr/share/nmap/scripts`:
+
+```bash
+$ cd usr/share/nmap/scripts
+```
+
+File script semua berformat *.nse (nmap single script), selain itu ada juga yang dikenal dengan nmap group script yang bisa dilihat di [https://nmap.org/book/nse-usage.html](https://nmap.org/book/nse-usage.html). Jika single script, script berdiri sendiri dan group script berdasararkan kategori.
+
+#### Single Script
+
+Script nmap ada di dalam `usr/share/nmap/scripts`.
+
+```bash
+$ cd usr/share/nmap/scripts
+```
+
+Kita akan menggunakan script `ftp-anon.nse` untuk melakukan scanning anonymous login
+
+```bash
+$ nmap --script ftp-anon.nse 192.168.1.22 -sS 
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-14 13:07 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.0091s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE
+21/tcp   open  ftp
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+22/tcp   open  ssh
+23/tcp   open  telnet
+25/tcp   open  smtp
+53/tcp   open  domain
+80/tcp   open  http
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+512/tcp  open  exec
+513/tcp  open  login
+514/tcp  open  shell
+1099/tcp open  rmiregistry
+1524/tcp open  ingreslock
+2049/tcp open  nfs
+2121/tcp open  ccproxy-ftp
+3306/tcp open  mysql
+5432/tcp open  postgresql
+5900/tcp open  vnc
+6000/tcp open  X11
+6667/tcp open  irc
+8009/tcp open  ajp13
+8180/tcp open  unknown
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.48 seconds
+```
+
+Hasil `Anonymous FTP login allowed`, login secara anonym diijinkan
+
+```bash
+$ ftp 192.168.1.22
+
+Connected to 192.168.1.22.
+220 (vsFTPd 2.3.4)
+Name (192.168.1.22:ucup): Anonymous
+331 Please specify the password.
+Password: 123456
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> 
+```
+
+__Help__
+
+Jika kita ingin mengetahui keterangan dari script nmap kita bisa menggunakan perintah (contoh: `http-wordpress-enum.nse`):
+
+```bash
+nmap --script-help http-wordpress-enum.nse 
+```
+
+#### Group Script
+
+ Group script yang bisa dilihat di [https://nmap.org/book/nse-usage.html](https://nmap.org/book/nse-usage.html). Kita akan melakukan scanning kategori `auth` menggunakan script group dengan sync scan.
+
+```bash
+$ nmap --script auth 192.168.1.22 -sS
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-14 10:59 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.011s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE
+21/tcp   open  ftp
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+22/tcp   open  ssh
+| ssh-auth-methods: 
+|   Supported authentication methods: 
+|     publickey
+|_    password
+| ssh-publickey-acceptance: 
+|_  Accepted Public Keys: No public keys accepted
+23/tcp   open  telnet
+25/tcp   open  smtp
+| smtp-enum-users: 
+|_  Couldn't find any accounts
+53/tcp   open  domain
+80/tcp   open  http
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+512/tcp  open  exec
+513/tcp  open  login
+514/tcp  open  shell
+1099/tcp open  rmiregistry
+1524/tcp open  ingreslock
+2049/tcp open  nfs
+2121/tcp open  ccproxy-ftp
+3306/tcp open  mysql
+|_mysql-empty-password: ERROR: Script execution failed (use -d to debug)
+5432/tcp open  postgresql
+5900/tcp open  vnc
+6000/tcp open  X11
+6667/tcp open  irc
+8009/tcp open  ajp13
+8180/tcp open  unknown
+| http-default-accounts: 
+|   [Apache Tomcat] at /manager/html/
+|     tomcat:tomcat
+|   [Apache Tomcat Host Manager] at /host-manager/html/
+|_    tomcat:tomcat
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+
+Host script results:
+| smb-enum-users: 
+|_  Domain: METASPLOITABLE; Users: backup, bin, bind, daemon, dhcp, distccd, ftp, games, gnats, irc, klog, libuuid, list, lp, mail, man, msfadmin, mysql, news, nobody, postfix, postgres, proftpd, proxy, root, service, sshd, sync, sys, syslog, telnetd, tomcat55, user, uucp, www-data
+
+Post-scan script results:
+| creds-summary: 
+|   192.168.1.22: 
+|     8180/nil: 
+|       tomcat:tomcat - Valid credentials
+|_      tomcat:tomcat - Valid credentials
+Nmap done: 1 IP address (1 host up) scanned in 30.76 seconds
+```
+
+Dari analisis di atas kita menemukan beberapa vurnerability yakni:
+* `Anonymous FTP login allowed (FTP code 230)` 
+* `mysql-empty-password`
+* `tomcat:tomcat - Valid credentials`
+
+Kita akan mencoba membuka browser untuk menguji server tomcat buka `192.168.1.22:8180`, pada menu tomcat administration klik dan masukan username `tomcat` dan password `tomcat` dan ternyata kita bisa masuk kedalam tomcat web server administration.
+
+Selanjutnya kita akan mencoba mencoba sript group `malware` untuk mengetahui target terinfeksi malware atau backdoor.
+
+```bash
+$ sudo nmap --script malware 192.168.1.22 -sS
+
+[sudo] password for ucup: 
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-14 12:43 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.0016s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE
+21/tcp   open  ftp
+| ftp-vsftpd-backdoor: 
+|   VULNERABLE:
+|   vsFTPd version 2.3.4 backdoor
+|     State: VULNERABLE (Exploitable)
+|     IDs:  BID:48539  CVE:CVE-2011-2523
+|       vsFTPd version 2.3.4 backdoor, this was reported on 2011-07-04.
+|     Disclosure date: 2011-07-03
+|     Exploit results:
+|       Shell command: id
+|       Results: uid=0(root) gid=0(root)
+|     References:
+|       http://scarybeastsecurity.blogspot.com/2011/07/alert-vsftpd-download-backdoored.html
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2011-2523
+|       https://www.securityfocus.com/bid/48539
+|_      https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/unix/ftp/vsftpd_234_backdoor.rb
+22/tcp   open  ssh
+23/tcp   open  telnet
+25/tcp   open  smtp
+53/tcp   open  domain
+80/tcp   open  http
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+512/tcp  open  exec
+513/tcp  open  login
+514/tcp  open  shell
+1099/tcp open  rmiregistry
+1524/tcp open  ingreslock
+2049/tcp open  nfs
+2121/tcp open  ccproxy-ftp
+3306/tcp open  mysql
+5432/tcp open  postgresql
+5900/tcp open  vnc
+6000/tcp open  X11
+6667/tcp open  irc
+|_irc-unrealircd-backdoor: Server closed connection, possibly due to too many reconnects. Try again with argument irc-unrealircd-backdoor.wait set to 100 (or higher if you get this message again).
+8009/tcp open  ajp13
+8180/tcp open  unknown
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 13.71 seconds
+```
+
+Dari hasil yang ada, ditemukan vulnerable atau terinfeksi malware/backdoor `ftp-vsftpd-backdoor` pada port 21 untuk `vsFTPd version 2.3.4 backdoor` dan sudah didokumentasikan dengan ID CVE: `CVE-2011-2523`, dan nmap berhasil menemukan user id ` Results: uid=0(root) gid=0(root)`. Dan pada port 6667 ditemukan potensi backdoor `6667/tcp open  irc |_irc-unrealircd-backdoor:`
+
+Kita juga dapat mencari versi service melalui group script `banner`:
+
+```bash
+$ sudo nmap --script banner 192.168.1.22 -sS
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-14 12:53 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.0031s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE
+21/tcp   open  ftp
+|_banner: 220 (vsFTPd 2.3.4)
+22/tcp   open  ssh
+|_banner: SSH-2.0-OpenSSH_4.7p1 Debian-8ubuntu1
+23/tcp   open  telnet
+|_banner: \xFF\xFD\x18\xFF\xFD \xFF\xFD#\xFF\xFD'
+25/tcp   open  smtp
+|_banner: 220 metasploitable.localdomain ESMTP Postfix (Ubuntu)
+53/tcp   open  domain
+80/tcp   open  http
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+512/tcp  open  exec
+|_banner: \x01Where are you?
+513/tcp  open  login
+514/tcp  open  shell
+1099/tcp open  rmiregistry
+1524/tcp open  ingreslock
+|_banner: root@metasploitable:/#
+2049/tcp open  nfs
+2121/tcp open  ccproxy-ftp
+|_banner: 220 ProFTPD 1.3.1 Server (Debian) [::ffff:192.168.1.22]
+3306/tcp open  mysql
+| banner: >\x00\x00\x00\x0A5.0.51a-3ubuntu5\x00#\x00\x00\x00M^p;sT+u\x00,
+|_\xAA\x08\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00...
+5432/tcp open  postgresql
+5900/tcp open  vnc
+|_banner: RFB 003.003
+6000/tcp open  X11
+6667/tcp open  irc
+| banner: :irc.Metasploitable.LAN NOTICE AUTH :*** Looking up your hostna
+|_me...\x0D\x0A:irc.Metasploitable.LAN NOTICE AUTH :*** Couldn't resol...
+8009/tcp open  ajp13
+8180/tcp open  unknown
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 15.56 seconds
+```
+
+#### Mencari Exploit 
+
+Dari hasil di atas kita menemukan versi vsftp 2.3.4, dan kita bisa mencari exploit yang bisa kita gunakan dengan perintah:
+
+```bash
+$ searchsploit vsFTPd 2.3.4
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                                                                                                                                            |  Path
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+vsftpd 2.3.4 - Backdoor Command Execution                                                                                                                                                                 | unix/remote/49757.py
+vsftpd 2.3.4 - Backdoor Command Execution (Metasploit)                                                                                                                                                    | unix/remote/17491.rb
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+```
+
+Kita juga dapat mencari exploit melalui pihak ketiga melalui internet, ketik di google `vsftpd 2.3.4 exploit` nanti akan diarahkan ke website exploit.
